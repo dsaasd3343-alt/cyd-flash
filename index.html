@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CYD Notifications - Web Flasher</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/webmodule.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(160deg, #0b0d1a 0%, #141a33 100%);
+    color: #f2f3fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .card {
+    width: 100%; max-width: 560px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 32px 28px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+  }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  h1 small { color: #a9b0d0; font-weight: normal; font-size: 14px; }
+  .brand { color: #7c6cff; font-weight: bold; font-size: 13px; letter-spacing: 1px; margin-bottom: 10px; }
+  .steps { margin: 20px 0 8px; }
+  .steps div { margin: 10px 0; line-height: 1.7; font-size: 15px; }
+  .steps b { color: #ffd54a; }
+  esp-web-install-button { display: block; margin: 22px 0 10px; }
+  .btn {
+    display: block; width: 100%;
+    padding: 16px;
+    border: 0; border-radius: 12px;
+    background: linear-gradient(135deg, #7c6cff, #5a4bd6);
+    color: #fff; font-size: 17px; font-weight: bold;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn:hover { filter: brightness(1.12); }
+  .note { color: #a9b0d0; font-size: 13px; line-height: 1.8; margin-top: 12px; }
+  .warn { background: rgba(255,213,74,0.1); border: 1px solid rgba(255,213,74,0.35);
+          border-radius: 10px; padding: 10px 14px; margin-top: 14px; font-size: 13px; color: #ffd54a; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">FUTURE COMPANY</div>
+  <h1>CYD Notifications <small>&mdash; شاشة إشعارات الجوال</small></h1>
+
+  <div class="steps">
+    <div><b>1.</b> وصّل الجهاز (CYD / ESP32) بكيبل USB للكمبيوتر</div>
+    <div><b>2.</b> اضغط زر التثبيت تحت، ووافق على اختيار المنفذ</div>
+    <div><b>3.</b> بعد الانتهاء، بنفس الصفحة اكتب اسم الواي فاي وكلمة السر</div>
+    <div><b>4.</b> حمّل تطبيق Pushbullet على جوالك وسجّل دخول</div>
+    <div><b>5.</b> افتح العنوان اللي يطلع على شاشة الجهاز، والصق رمز Pushbullet مالك</div>
+    <div><b>6.</b> يبدأ يعرض إشعارات جوالك مباشرة</div>
+  </div>
+
+  <esp-web-install-button manifest="./manifest.json">
+    <button class="btn" slot="activate">تثبيت على الجهاز</button>
+    <span slot="unsupported">متصفحك ما يدعم الفلاش من الويب. استخدم Chrome أو Edge على كمبيوتر أو أندرويد.</span>
+  </esp-web-install-button>
+
+  <div class="warn">
+    إذا أردت تغيير الواي فاي بالمرّة الجاية: وصّل الجهاز USB، افتح هذي الصفحة، اضغط زر التثبيت واختر &laquo;Connect to device&raquo; بدل التثبيت.
+  </div>
+
+  <p class="note">
+    يتطلب Chrome أو Edge (كمبيوتر أو أندرويد). آيفون/سفاري ما يدعم.
+    الرمز مال Pushbullet يحفظ بجهازك فقط، وكل جهاز يرتبط بحساب صاحبه.
+  </p>
+</div>
+</body>
+</html>
