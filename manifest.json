@@ -1,6 +1,6 @@
 {
-  "name": "CYD Notifications",
-  "version": "1.0.0",
+  "name": "CYD Weather Station",
+  "version": "1.1.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
