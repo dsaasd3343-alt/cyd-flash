@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CYD Weather Station - Web Flasher</title>
+<title>CYD Phone Notification Display - Web Flasher</title>
 <script type="module" src="./web/install-button.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,6 +29,11 @@
   h1 { font-size: 24px; margin-bottom: 4px; }
   h1 small { color: #a9b0d0; font-weight: normal; font-size: 14px; }
   .brand { color: #7c6cff; font-weight: bold; font-size: 13px; letter-spacing: 1px; margin-bottom: 10px; }
+  .features { display: flex; gap: 10px; margin: 14px 0 4px; flex-wrap: wrap; }
+  .features span {
+    background: rgba(46,230,107,0.12); border: 1px solid rgba(46,230,107,0.35);
+    color: #2ee66b; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: bold;
+  }
   .steps { margin: 20px 0 8px; }
   .steps div { margin: 10px 0; line-height: 1.7; font-size: 15px; }
   .steps b { color: #ffd54a; }
@@ -49,26 +54,33 @@
 <body>
 <div class="card">
   <div class="brand">FUTURE COMPANY</div>
-  <h1>محطة طقس CYD <small>&mdash; مع إشعارات الجوال من Pushbullet</small></h1>
+  <h1>CYD Phone Notification Display <small>&mdash; mirrored from your phone via Pushbullet</small></h1>
+
+  <div class="features">
+    <span>&#128242; Phone Notifications</span>
+    <span>&#127468;&#127462; Arabic Supported</span>
+    <span>&#128337; 12-Hour Clock</span>
+  </div>
 
   <div class="steps">
-    <div><b>1.</b> وصّل الجهاز (CYD / ESP32) بكيبل USB للكمبيوتر</div>
-    <div><b>2.</b> اضغط زر التثبيت تحت، ووافق على اختيار المنفذ</div>
-    <div><b>3.</b> بعد ما يخلص، الجهاز يطلع شبكة اسمها <span class="hl">CYD-Setup</span></div>
-    <div><b>4.</b> اتصل بيها من جوالك وافتح <span class="hl">192.168.4.1</span> (أو الصفحة تفتح لحالها)</div>
-    <div><b>5.</b> اختر شبكة بيتك، اكتب كلمة السر، والصق رمز Pushbullet، واضغط حفظ</div>
-    <div><b>6.</b> الجهاز يعيد التشغيل ويبدأ يعرض إشعارات جوالك ✅</div>
+    <div><b>1.</b> Connect the CYD / ESP32 board to your computer with a USB cable</div>
+    <div><b>2.</b> Press the Install button below and choose the serial port</div>
+    <div><b>3.</b> When flashing finishes, the device broadcasts a Wi-Fi network named <span class="hl">CYD-Setup</span></div>
+    <div><b>4.</b> Join it from your phone and open <span class="hl">192.168.4.1</span> (the page usually opens by itself)</div>
+    <div><b>5.</b> Pick your home Wi-Fi, enter the password, paste your Pushbullet Access Token, then Save</div>
+    <div><b>6.</b> The device restarts and starts showing your phone notifications, in English and Arabic &#9989;</div>
   </div>
 
   <esp-web-install-button manifest="./manifest.json">
-    <button class="btn" slot="activate">تثبيت على الجهاز</button>
-    <span slot="unsupported">متصفحك ما يدعم الفلاش من الويب. استخدم Chrome أو Edge على كمبيوتر أو أندرويد.</span>
+    <button class="btn" slot="activate">Install on Device</button>
+    <span slot="unsupported">Your browser does not support web-based flashing. Use Chrome or Edge on a desktop or Android.</span>
   </esp-web-install-button>
 
   <p class="note">
-    التثبيت يتطلب Chrome أو Edge (كمبيوتر أو أندرويد)، بس خطوات الإعداد بعد التثبيت تشتغل من أي جوال حتى آيفون.
-    رمز Pushbullet تلقاه: pushbullet.com ← Settings ← Access Tokens ← Create Access Token (يبدأ بـ o.).
-    لتغيير الواي فاي أو الرمز بعدين: افتح عنوان الجهاز من نفس الشبكة، أو إذا ما اشتغل الواي فاي يرجع يطلع CYD-Setup لحاله.
+    Installing requires Chrome or Edge (desktop or Android). The setup steps after install work from any phone, including iPhone.
+    Find your Pushbullet token at: pushbullet.com &#8594; Settings &#8594; Access Tokens &#8594; Create Access Token (it starts with o.).
+    To change Wi-Fi or the token later: open the device address from the same network. If the saved Wi-Fi is unreachable, the device automatically broadcasts CYD-Setup again.
+    Touch guide: tap the left third of the screen for the previous notification, the right third for the next one, and the middle to mark all as read.
   </p>
 </div>
 </body>
