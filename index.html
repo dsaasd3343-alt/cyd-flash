@@ -42,23 +42,7 @@
     cursor: pointer; font-family: inherit;
   }
   .btn:hover { filter: brightness(1.12); }
-  .btn:disabled { filter: grayscale(0.6); cursor: wait; }
-  .tokenbox {
-    margin-top: 26px; padding: 20px;
-    border: 1px solid rgba(124,108,255,0.4);
-    border-radius: 14px;
-    background: rgba(124,108,255,0.08);
-  }
-  .tokenbox h3 { font-size: 17px; margin-bottom: 8px; color: #c9c2ff; }
-  .tokenbox p { font-size: 13px; color: #a9b0d0; line-height: 1.8; margin-bottom: 12px; }
-  .tokenbox input {
-    width: 100%; padding: 13px; margin-bottom: 10px;
-    border-radius: 10px; border: 1px solid #3942;
-    background: #12152a; color: #fff; font-size: 15px;
-    direction: ltr; text-align: left;
-  }
-  #pbstatus { font-size: 14px; margin-top: 10px; line-height: 1.7; min-height: 22px; }
-  .ok { color: #2ee66b; } .err { color: #ff5a5a; } .wait { color: #ffd54a; }
+  .hl { color: #2ee66b; font-weight: bold; }
   .note { color: #a9b0d0; font-size: 13px; line-height: 1.8; margin-top: 12px; }
 </style>
 </head>
@@ -70,9 +54,10 @@
   <div class="steps">
     <div><b>1.</b> وصّل الجهاز (CYD / ESP32) بكيبل USB للكمبيوتر</div>
     <div><b>2.</b> اضغط زر التثبيت تحت، ووافق على اختيار المنفذ</div>
-    <div><b>3.</b> الجهاز يبحث عن الشبكات القريبة ويعرضها - اختر شبكتك واكتب كلمة السر</div>
-    <div><b>4.</b> حمّل تطبيق Pushbullet على جوالك وسجّل دخول</div>
-    <div><b>5.</b> انسخ الـ Access Token مالك من pushbullet.com وأدخله بالخانة تحت</div>
+    <div><b>3.</b> بعد ما يخلص، الجهاز يطلع شبكة اسمها <span class="hl">CYD-Setup</span></div>
+    <div><b>4.</b> اتصل بيها من جوالك وافتح <span class="hl">192.168.4.1</span> (أو الصفحة تفتح لحالها)</div>
+    <div><b>5.</b> اختر شبكة بيتك، اكتب كلمة السر، والصق رمز Pushbullet، واضغط حفظ</div>
+    <div><b>6.</b> الجهاز يعيد التشغيل ويبدأ يعرض إشعارات جوالك ✅</div>
   </div>
 
   <esp-web-install-button manifest="./manifest.json">
@@ -80,102 +65,11 @@
     <span slot="unsupported">متصفحك ما يدعم الفلاش من الويب. استخدم Chrome أو Edge على كمبيوتر أو أندرويد.</span>
   </esp-web-install-button>
 
-  <div class="tokenbox">
-    <h3>الخطوة الأخيرة: رمز Pushbullet (API Token)</h3>
-    <p>تلقاه هني: pushbullet.com ← Settings ← Access Tokens ← Create Access Token (يبدأ بـ o.)<br>
-    بعد ما تكتبه وتضغط إرسال، يوصل للجهاز عن طريق كيبل الـ USB ويبدأ يشتغل مباشرة.</p>
-    <input id="pbtoken" placeholder="o.xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-    <button class="btn" id="sendBtn" onclick="sendToken()">إرسال الرمز للجهاز</button>
-    <div id="pbstatus" class="wait"></div>
-  </div>
-
   <p class="note">
-    يتطلب Chrome أو Edge (كمبيوتر أو أندرويد). آيفون/سفاري ما يدعم.
-    إذا تريد تغيير الواي فاي أو الرمز بالمرّة الجاية: وصّل الجهاز USB وافتح هذي الصفحة.
-    الرمز يحفظ بجهازك فقط، وكل جهاز يرتبط بحساب صاحبه.
+    التثبيت يتطلب Chrome أو Edge (كمبيوتر أو أندرويد)، بس خطوات الإعداد بعد التثبيت تشتغل من أي جوال حتى آيفون.
+    رمز Pushbullet تلقاه: pushbullet.com ← Settings ← Access Tokens ← Create Access Token (يبدأ بـ o.).
+    لتغيير الواي فاي أو الرمز بعدين: افتح عنوان الجهاز من نفس الشبكة، أو إذا ما اشتغل الواي فاي يرجع يطلع CYD-Setup لحاله.
   </p>
 </div>
-
-<script>
-async function sendToken() {
-  const status = document.getElementById('pbstatus');
-  const btn = document.getElementById('sendBtn');
-  const tok = document.getElementById('pbtoken').value.trim();
-
-  if (!tok.startsWith('o.') || tok.length < 12) {
-    status.className = 'err';
-    status.textContent = 'الرمز غير صحيح - لازم يبدأ بـ o. ويثبت بعده';
-    return;
-  }
-  if (!('serial' in navigator)) {
-    status.className = 'err';
-    status.textContent = 'متصفحك ما يدعم الاتصال التسلسلي - استخدم Chrome أو Edge';
-    return;
-  }
-
-  btn.disabled = true;
-  status.className = 'wait';
-  status.textContent = 'اختر منفذ الجهاز من النافذة اللي راح تطلع...';
-
-  let port;
-  try {
-    port = await navigator.serial.requestPort();
-    await port.open({ baudRate: 115200 });
-  } catch (e) {
-    btn.disabled = false;
-    status.className = 'err';
-    status.textContent = 'ما انفتح المنفذ - تأكد إن الجهاز موصول بـ USB وجرّب مرة ثانية';
-    return;
-  }
-
-  status.className = 'wait';
-  status.textContent = 'جاري الاتصال بالجهاز...';
-
-  // opening the port may reboot the device - give it time
-  await new Promise(r => setTimeout(r, 3500));
-
-  try {
-    const writer = port.writable.getWriter();
-    await writer.write(new TextEncoder().encode('PB:' + tok + '\n'));
-    writer.releaseLock();
-    status.textContent = 'انرسل الرمز - ننتظر رد الجهاز...';
-  } catch (e) {
-    btn.disabled = false;
-    status.className = 'err';
-    status.textContent = 'فشل الإرسال - جرّب مرة ثانية';
-    await port.close();
-    return;
-  }
-
-  // wait for TOKEN_SAVED / TOKEN_INVALID
-  let reply = '';
-  try {
-    const reader = port.readable.getReader();
-    const deadline = Date.now() + 12000;
-    while (Date.now() < deadline) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      reply += new TextDecoder().decode(value);
-      if (reply.includes('TOKEN_SAVED') || reply.includes('TOKEN_INVALID')) break;
-    }
-    reader.releaseLock();
-  } catch (e) { /* device may close port on restart */ }
-
-  if (reply.includes('TOKEN_SAVED')) {
-    status.className = 'ok';
-    status.textContent = 'تم الحفظ! الجهاز يعيد التشغيل ويبدأ يعرض إشعاراتك خلال ثواني ✅';
-    document.getElementById('pbtoken').value = '';
-  } else if (reply.includes('TOKEN_INVALID')) {
-    status.className = 'err';
-    status.textContent = 'الجهاز رفض الرمز - تأكد إنك نسخته كامل ويبدأ بـ o.';
-  } else {
-    status.className = 'wait';
-    status.textContent = 'انرسل الرمز. إذا ما اشتغل الجهاز خلال دقيقة، اضغط إرسال مرة ثانية.';
-  }
-
-  try { await port.close(); } catch (e) {}
-  btn.disabled = false;
-}
-</script>
 </body>
 </html>
