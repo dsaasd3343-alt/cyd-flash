@@ -1,6 +1,6 @@
 {
   "name": "CYD Phone Notification Display",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "new_install_prompt_erase": true,
   "builds": [
     {
