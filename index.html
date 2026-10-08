@@ -48,6 +48,7 @@
   }
   .btn:hover { filter: brightness(1.12); }
   .hl { color: #2ee66b; font-weight: bold; }
+  .wrow { font-size:13px; line-height:1.9; color:#e7e7e7; }
   .note { color: #a9b0d0; font-size: 13px; line-height: 1.8; margin-top: 12px; }
 </style>
 </head>
@@ -72,10 +73,40 @@
     <div><b>6.</b> The device restarts and starts showing your phone notifications, in English and Arabic &#9989;</div>
   </div>
 
+  <label for="device" style="display:block;margin:18px 0 6px;font-size:15px;">Choose your device:</label>
+  <select id="device" style="width:100%;padding:12px;border-radius:10px;background:#141a33;color:#f2f3fa;border:1px solid rgba(255,255,255,0.2);font-size:15px;font-family:inherit;">
+    <option value="./manifest.json" selected>CYD 2.8" / 2.4" (ESP32-2432S028 / S024)</option>
+    <option value="./manifest-ili9341.json">Standalone ESP32 + external ILI9341 SPI display</option>
+  </select>
+
+  <div id="wiring" style="display:none;margin-top:14px;">
+    <div style="font-size:14px;color:#ffd54a;font-weight:bold;margin-bottom:6px;">Wiring for standalone display:</div>
+    <div class="wrow">Display CS &rarr; GPIO 15 &nbsp;|&nbsp; DC &rarr; GPIO 2 &nbsp;|&nbsp; RESET &rarr; EN</div>
+    <div class="wrow">MOSI &rarr; GPIO 13 &nbsp;|&nbsp; SCK &rarr; GPIO 14 &nbsp;|&nbsp; MISO &rarr; GPIO 12 (optional)</div>
+    <div class="wrow">Backlight LED &rarr; GPIO 21 (or 3.3V) &nbsp;|&nbsp; VCC &rarr; 3.3V &nbsp;|&nbsp; GND &rarr; GND</div>
+    <div class="wrow" style="color:#a9b0d0;">Touch (optional): CLK &rarr; 25, CS &rarr; 33, DIN &rarr; 32, DO &rarr; 39</div>
+  </div>
+
+  <div id="btnHolder">
   <esp-web-install-button manifest="./manifest.json">
     <button class="btn" slot="activate">Install on Device</button>
     <span slot="unsupported">Your browser does not support web-based flashing. Use Chrome or Edge on a desktop or Android.</span>
   </esp-web-install-button>
+  </div>
+
+  <script>
+    const sel = document.getElementById('device');
+    const wiring = document.getElementById('wiring');
+    function renderBtn() {
+      document.getElementById('btnHolder').innerHTML =
+        '<esp-web-install-button manifest="' + sel.value + '">' +
+        '<button class="btn" slot="activate">Install on Device</button>' +
+        '<span slot="unsupported">Your browser does not support web-based flashing. Use Chrome or Edge on a desktop or Android.</span>' +
+        '</esp-web-install-button>';
+      wiring.style.display = sel.value.includes('ili9341') ? 'block' : 'none';
+    }
+    sel.addEventListener('change', renderBtn);
+  </script>
 
   <p class="note">
     Installing requires Chrome or Edge (desktop or Android). The setup steps after install work from any phone, including iPhone.
