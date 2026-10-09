@@ -1,6 +1,6 @@
 {
   "name": "CYD Phone Notification Display",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -19,7 +19,7 @@
           "offset": 57344
         },
         {
-          "path": "firmware-1.4.4.bin",
+          "path": "firmware-1.4.5.bin",
           "offset": 65536
         }
       ]
