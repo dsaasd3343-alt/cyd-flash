@@ -69,11 +69,12 @@
   <div class="steps">
     <div><b>1.</b> Connect the CYD / ESP32 board to your computer with a USB cable</div>
     <div><b>2.</b> Press the Install button below and choose the serial port</div>
-    <div><b>3.</b> When flashing finishes, the device broadcasts a Wi-Fi network named <span class="hl">CYD-Setup</span></div>
-    <div><b>4.</b> Join it from your phone and open <span class="hl">192.168.4.1</span> (the page usually opens by itself)</div>
-    <div><b>5.</b> Pick your home Wi-Fi, enter the password, paste your Pushbullet Access Token, then Save</div>
-    <div><b>6.</b> The device restarts and starts showing your phone notifications, in English and Arabic &#9989;</div>
+    <div><b>3.</b> Done! The device turns on Bluetooth as <span class="hl">CYD-Display</span> — no Wi-Fi, no passwords, no setup page</div>
+    <div><b>4.</b> On your phone: pair with <span class="hl">CYD-Display</span> in Bluetooth settings</div>
+    <div><b>5.</b> Install the <span class="hl">CYD Notifier</span> app (link below), allow notification access, press Start</div>
+    <div><b>6.</b> Your notifications now appear on the screen instantly, in English and Arabic &#9989;</div>
   </div>
+  <a class="btn" href="./CYD-Notifier-BT.apk" download style="text-align:center;text-decoration:none;margin-top:6px;">&#128241; Download CYD Notifier app (Android)</a>
 
   <label for="device" style="display:block;margin:18px 0 6px;font-size:15px;">Choose your device:</label>
   <select id="device" style="width:100%;padding:12px;border-radius:10px;background:#141a33;color:#f2f3fa;border:1px solid rgba(255,255,255,0.2);font-size:15px;font-family:inherit;">
@@ -113,9 +114,7 @@
 
   <p class="note">
     Installing requires Chrome or Edge (desktop or Android). The setup steps after install work from any phone, including iPhone.
-    Find your Pushbullet token at: pushbullet.com &#8594; Settings &#8594; Access Tokens &#8594; Create Access Token (it starts with o.).
-    To change Wi-Fi or the token later: open the device address from the same network. If the saved Wi-Fi is unreachable, the device automatically broadcasts CYD-Setup again.
-    Firmware v1.5.0 adds a Bluetooth mode (no Wi-Fi needed) on top of the v1.4.10 security fix. your Wi-Fi password and API token are saved on the device only and are never shown again in the settings page &mdash; leave a field empty to keep its saved value. Touch guide: tap the left third of the screen for the previous notification, the right third for the next one, and the middle to mark all as read.
+    Firmware v1.6.0: Bluetooth-only — flash, pair, done. No Wi-Fi, no passwords, no tokens. your Wi-Fi password and API token are saved on the device only and are never shown again in the settings page &mdash; leave a field empty to keep its saved value. Touch guide: tap the left third of the screen for the previous notification, the right third for the next one, and the middle to mark all as read.
   </p>
 </div>
 </body>
