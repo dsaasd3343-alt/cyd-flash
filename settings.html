@@ -47,5 +47,42 @@ document.addEventListener('DOMContentLoaded', function(){
   document.body.addEventListener('touchstart', go, {passive:true});
 });
 </script>
+
+<script>
+// anonymous visit counter: device type / OS / browser only, no names, no personal data
+(function(){
+  try {
+    var ua = navigator.userAgent || "";
+    var m = ua.match(/Android\s([\d.]+)/i);
+    var brand = "", model = "";
+    var b = ua.match(/;\s*([^;)]+)\s+Build/i);
+    if (b) { var parts = b[1].trim().split(" "); brand = parts[0]; model = parts.slice(1).join(" "); }
+    var br = "Unknown";
+    if (/EdgA|Edg\//i.test(ua)) br = "Edge";
+    else if (/SamsungBrowser/i.test(ua)) br = "Samsung Internet";
+    else if (/OPR|Opera/i.test(ua)) br = "Opera";
+    else if (/Firefox|FxiOS/i.test(ua)) br = "Firefox";
+    else if (/Chrome|CriOS/i.test(ua)) br = "Chrome";
+    else if (/Safari/i.test(ua)) br = "Safari";
+    var body = {
+      page: "settings",
+      brand: brand,
+      model: model,
+      os_version: m ? ("Android " + m[1]) : (ua.indexOf("iPhone") >= 0 ? "iOS" : "Other"),
+      browser: br,
+      screen: window.screen.width + "x" + window.screen.height,
+      lang: navigator.language || "",
+      referrer: document.referrer || "direct"
+    };
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("https://api.base44.com/api/apps/6ab9e2f7044ccb3aaa3aace6/functions/trackVisit",
+        new Blob([JSON.stringify(body)], {type: "application/json"}));
+    } else {
+      fetch("https://api.base44.com/api/apps/6ab9e2f7044ccb3aaa3aace6/functions/trackVisit",
+        {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
