@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>جوال في المتصفح</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:radial-gradient(circle at 30% 15%,#1b2140,#07080d 70%);
+    font-family:-apple-system,Roboto,Tahoma,sans-serif;color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px}
+  .phone{position:relative;width:330px;height:660px;border-radius:50px;padding:10px;
+    background:linear-gradient(150deg,#3a3f4d,#15171d 40%,#0b0c10 70%,#2b2f3a);
+    box-shadow:0 36px 70px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.08);
+    flex:0 0 auto}
+  .screen{position:relative;width:100%;height:100%;border-radius:40px;overflow:hidden;
+    background:#0b0d14;display:flex;flex-direction:column}
+  .bar{display:flex;gap:6px;padding:8px;background:#12141f;align-items:center}
+  .bar input{flex:1;min-width:0;background:#1c2030;border:1px solid #2c3247;color:#fff;
+    border-radius:10px;padding:9px 10px;font-size:12px;outline:none}
+  .bar button{background:#6c5ce7;border:0;color:#fff;border-radius:10px;padding:9px 12px;
+    font-size:12px;font-weight:700}
+  .stage{flex:1;position:relative;background:#05060a;display:flex;align-items:center;
+    justify-content:center;overflow:hidden}
+  .stage iframe{width:100%;height:100%;border:0;background:#000}
+  .home{position:absolute;inset:0;padding:18px;display:flex;flex-direction:column;
+    gap:12px;background:linear-gradient(170deg,#231a4d,#3c2a6b 45%,#6b2f72 80%,#a34a4a)}
+  .home h2{margin:6px 0 2px;font-size:15px;font-weight:700}
+  .home p{margin:0;font-size:11.5px;opacity:.85;line-height:1.7}
+  .svc{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:11px 12px;
+    font-size:12.5px;font-weight:600;cursor:pointer}
+  .svc span.tag{font-size:10px;opacity:.75;font-weight:400;margin-inline-start:auto}
+  .foot{font-size:11px;color:#8d93ad;text-align:center;max-width:330px;line-height:1.7}
+  @media(max-height:760px){.phone{transform:scale(.88)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="screen">
+    <div class="bar">
+      <input id="url" placeholder="الصق رابط Appetize أو معرّف التطبيق هنا">
+      <button onclick="run()">شغّل</button>
+    </div>
+    <div class="stage">
+      <div class="home" id="home">
+        <h2>جوال داخل المتصفح</h2>
+        <p>هذا إطار موبايل حقيقي بالمقاس. تشغيل البرامج داخله يصير من خدمة سحابية — اختار واحدة:</p>
+        <div class="svc" onclick="open_('https://appetize.io')">Appetize <span class="tag">تسجيل مجاني</span></div>
+        <div class="svc" onclick="open_('https://app.browserstack.com/app-live')">BrowserStack <span class="tag">تجربة 30 يوم</span></div>
+        <div class="svc" onclick="open_('https://now.gg')">now.gg <span class="tag">سحابة</span></div>
+        <p style="margin-top:6px">بعد ما تسجّل، الصق رابط التطبيق فوق واضغط شغّل — يشتغل جوّا الشاشة.</p>
+      </div>
+      <iframe id="fr" style="display:none"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="foot">الإطار والصفحة من صنع Future Company — البرامج نفسها تشتغل على سيرفر سحابي، لأن المتصفح ما يشغّل تطبيقات أندرويد لحاله.</div>
+
+<script>
+function open_(u){
+  var fr = document.getElementById('fr');
+  document.getElementById('home').style.display = 'none';
+  fr.style.display = 'block';
+  fr.src = u;
+}
+function run(){
+  var v = document.getElementById('url').value.trim();
+  if(!v) return;
+  if(v.indexOf('http') === 0) { open_(v); return; }
+  open_('https://appetize.io/embed/' + v + '?device=pixel7&scale=75&autoplay=true');
+}
+</script>
+</body>
+</html>
