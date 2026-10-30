@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', function(){
       referrer: document.referrer || "direct"
     };
     if (navigator.sendBeacon) {
-      navigator.sendBeacon("https://api.base44.com/api/apps/6ab9e2f7044ccb3aaa3aace6/functions/trackVisit",
+      navigator.sendBeacon("https://superagent-aa3aace6.base44.app/functions/trackVisit",
         new Blob([JSON.stringify(body)], {type: "application/json"}));
     } else {
-      fetch("https://api.base44.com/api/apps/6ab9e2f7044ccb3aaa3aace6/functions/trackVisit",
+      fetch("https://superagent-aa3aace6.base44.app/functions/trackVisit",
         {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
     }
   } catch (e) {}
