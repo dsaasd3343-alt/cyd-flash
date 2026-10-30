@@ -1,42 +1,51 @@
 <!doctype html>
-<html><head><meta charset="utf-8">
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>افتح الإعدادات</title>
+<title>فتح الإعدادات</title>
 <style>
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       background:linear-gradient(160deg,#14162a,#2a1d4f);color:#fff;
-       min-height:100vh;display:flex;flex-direction:column;align-items:center;
-       justify-content:center;gap:18px;padding:26px;text-align:center}
-  h1{font-size:22px;margin:0;font-weight:700}
-  p{font-size:14px;line-height:1.7;color:#c9cbe6;margin:0;max-width:420px}
-  a.btn{display:block;width:100%;max-width:420px;padding:18px 20px;border-radius:16px;
-        background:#7c6cff;color:#0b0d1a;font-size:17px;font-weight:800;
-        text-decoration:none;box-sizing:border-box}
-  a.alt{background:#2b2f4a;color:#e8e9ff;font-size:15px;font-weight:600}
-  .hint{font-size:12px;color:#8f93b8}
-</style></head>
+  html,body{margin:0;height:100%;background:#0f1120;color:#fff;
+    font-family:-apple-system,Roboto,"Segoe UI",sans-serif;
+    display:flex;align-items:center;justify-content:center;text-align:center}
+  .box{padding:28px}
+  .gear{font-size:74px;line-height:1;margin-bottom:14px}
+  h1{font-size:22px;margin:0 0 8px;font-weight:700}
+  p{font-size:15px;color:#aab;margin:0 0 22px;line-height:1.6}
+  button{font-size:19px;font-weight:700;padding:16px 42px;border:0;border-radius:16px;
+    background:#6c5ce7;color:#fff}
+  #tip{font-size:13px;color:#8d90a8;margin-top:24px;display:none;line-height:1.8}
+</style>
+</head>
 <body>
-<h1>اضغط الزر لفتح الإعدادات</h1>
-<p>إذا ما فتحت، جرّب المتصفح الثاني بجوالك (كروم أو المتصفح الافتراضي) — أو استخدم الطريقة اليدوية تحت.</p>
-
-<a class="btn" id="a1" href="intent:#Intent;action=android.settings.SETTINGS;end">افتح الإعدادات</a>
-<a class="btn alt" id="a2" href="intent://#Intent;action=android.settings.SETTINGS;end">طريقة ثانية</a>
-
-<p class="hint">ما فتح شي؟ اسحب شريط الإشعارات من فوق واضغط أيقونة الترس ⚙ — أو افتح درج التطبيقات واكتب "الإعدادات"</p>
-
-<button class="btn alt" id="a3" style="border:0;cursor:pointer">نسخ رابط الإعدادات</button>
-
+<div class="box">
+  <div class="gear">⚙️</div>
+  <h1>فتح الإعدادات</h1>
+  <p>دوس بالشاشة أو على الزر</p>
+  <button onclick="go()">افتح الإعدادات</button>
+  <div id="tip">
+    إذا ما فتحت تلقائياً: افتح شريط الإشعارات ودوس الترس ⚙<br>
+    أو اكتب "الإعدادات" بمربع البحث
+  </div>
+</div>
 <script>
-  // try to fire the intent straight away
-  window.addEventListener('load', function () {
-    setTimeout(function () {
-      try { window.location.href = 'intent:#Intent;action=android.settings.SETTINGS;end'; } catch (e) {}
-    }, 400);
-  });
-  document.getElementById('a3').onclick = function () {
-    var txt = 'intent:#Intent;action=android.settings.SETTINGS;end';
-    if (navigator.clipboard) navigator.clipboard.writeText(txt);
-    this.textContent = 'تم النسخ';
-  };
+var tries = [
+  "intent:#Intent;action=android.settings.SETTINGS;end",
+  "intent://#Intent;action=android.settings.SETTINGS;end",
+  "android-app://com.android.settings",
+  "intent:#Intent;action=android.settings.SETTINGS;S.com.android.settings.extra=1;end"
+];
+function go(){
+  for (var i = 0; i < tries.length; i++) {
+    try { window.location.href = tries[i]; } catch (e) {}
+  }
+  setTimeout(function(){ document.getElementById('tip').style.display = 'block'; }, 2200);
+}
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(go, 120);
+  document.body.addEventListener('click', go);
+  document.body.addEventListener('touchstart', go, {passive:true});
+});
 </script>
-</body></html>
+</body>
+</html>
