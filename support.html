@@ -5,64 +5,59 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>أنا أدعمك</title>
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;background:radial-gradient(circle at 30% 0%,#2a1e4d,#0c0e1a 60%);
-    color:#fff;font-family:-apple-system,Roboto,"Segoe UI",sans-serif;
-    display:flex;align-items:center;justify-content:center;padding:20px}
-  .card{width:100%;max-width:420px;background:rgba(24,27,46,.92);border:1px solid #2b2f4d;
-    border-radius:22px;padding:22px}
-  h1{font-size:22px;margin:0 0 6px;text-align:center}
-  .sub{color:#9a9dbd;font-size:13px;text-align:center;margin-bottom:18px;line-height:1.7}
-  input,textarea{width:100%;padding:13px 14px;margin-bottom:10px;border-radius:13px;border:1px solid #333a5e;
-    background:#12142a;color:#fff;font-size:15px;font-family:inherit}
-  textarea{height:86px;resize:none}
-  button{width:100%;padding:15px;border:0;border-radius:14px;font-size:17px;font-weight:700;color:#fff;
-    background:linear-gradient(135deg,#6c5ce7,#c44bd6)}
-  .count{text-align:center;color:#b9bbd8;font-size:13px;margin-top:14px}
-  .ok{text-align:center;padding:14px;border-radius:14px;background:#1c3a2a;color:#8ef0b6;font-size:15px;display:none}
-  .link{display:block;text-align:center;color:#8f92b3;font-size:12px;margin-top:16px;text-decoration:none}
+  body{margin:0;background:#0f1120;color:#eef;font-family:Roboto,Arial,sans-serif;padding:20px;font-size:16px}
+  h1{font-size:22px;margin:0 0 6px}
+  .sub{color:#9a9dbb;font-size:14px;margin-bottom:20px;line-height:1.7}
+  .count{background:#1a1d33;border-radius:16px;padding:16px;text-align:center;margin-bottom:20px}
+  .count b{font-size:34px;display:block;color:#8b7cf6}
+  label{display:block;font-size:14px;color:#b9bcd8;margin:14px 0 6px}
+  input,textarea{width:100%;box-sizing:border-box;background:#181b2e;border:1px solid #2b2f4a;
+    border-radius:12px;color:#fff;padding:14px;font-size:16px;font-family:inherit}
+  textarea{height:90px;resize:none}
+  button{width:100%;margin-top:20px;padding:16px;font-size:18px;font-weight:700;border:0;
+    border-radius:14px;background:#6c5ce7;color:#fff}
+  .foot{color:#6f7392;font-size:12px;text-align:center;margin-top:18px;line-height:1.7}
 </style>
 </head>
 <body>
-<div class="card">
   <h1>❤️ أنا أدعمك</h1>
-  <div class="sub">اكتب اسمك وكلمة تشجيع — وتطلع باسمك بقائمة الداعمين</div>
-  <input id="name" placeholder="اسمك" autocomplete="name">
-  <input id="email" placeholder="إيميلك (اختياري)" inputmode="email">
-  <textarea id="msg" placeholder="كلمة تشجيع (اختياري)"></textarea>
-  <button onclick="send()">سجّل دعمي</button>
-  <div class="count" id="count"></div>
-  <div class="ok" id="ok">شكراً لك ❤️ وصل دعمك</div>
-  <a class="link" href="https://superagent-aa3aace6.base44.app/functions/supportSign?report">شوف قائمة الداعمين</a>
-</div>
+  <div class="sub">إذا تدعمني وتشجعني، اكتب اسمك وخلّي كلمة تشجيع — وتظهر باسمك بقائمة الداعمين</div>
+
+  <div class="count"><b id="num">…</b>صديق يدعمني حتى الآن</div>
+
+  <form action="https://superagent-aa3aace6.base44.app/functions/supportSign" method="POST">
+    <label>اسمك *</label>
+    <input type="text" name="name" required maxlength="60" placeholder="اسمك">
+
+    <label>إيميلك (اختياري)</label>
+    <input type="email" name="email" maxlength="80" placeholder="example@mail.com">
+
+    <label>كلمة تشجيع (اختياري)</label>
+    <textarea name="message" maxlength="300" placeholder="اكتب اللي تحبه"></textarea>
+
+    <input type="hidden" name="device" id="dev" value="">
+
+    <button type="submit">سجّل دعمي</button>
+  </form>
+
+  <div class="foot">بياناتك تبقى عندي بس، وتنستعمل لقائمة الداعمين فقط</div>
+
 <script>
-var API = "https://superagent-aa3aace6.base44.app/functions/supportSign";
-function device(){
-  var ua = navigator.userAgent, m = ua.match(/Android[^;]*; ([^)]+)\)/);
-  return (m ? m[1].replace(/Build.*/, "").trim() : (ua.indexOf("iPhone") >= 0 ? "iPhone" : "Browser"));
-}
-function send(){
-  var name = document.getElementById("name").value.trim();
-  if (!name) { alert("اكتب اسمك أول"); return; }
-  fetch(API, {
-    method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({name: name,
-      email: document.getElementById("email").value.trim(),
-      message: document.getElementById("msg").value.trim(),
-      device: device()})
-  }).then(function(r){ return r.json(); }).then(function(d){
-    if (d && d.ok) {
-      document.getElementById("ok").style.display = "block";
-      document.getElementById("count").textContent = "صار عدد الداعمين: " + d.count;
-      document.getElementById("name").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("msg").value = "";
-    } else { alert("صار خطأ، جرّب مرة ثانية"); }
-  }).catch(function(){ alert("ما وصل، جرّب مرة ثانية"); });
-}
-fetch(API).then(function(r){return r.json();}).then(function(d){
-  if (d && d.count !== undefined) document.getElementById("count").textContent = "عدد الداعمين هسه: " + d.count;
-}).catch(function(){});
+  (function () {
+    var dev = document.getElementById("dev");
+    try { dev.value = (navigator.userAgent || "").substring(0, 80); } catch (e) {}
+    var num = document.getElementById("num");
+    try {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://superagent-aa3aace6.base44.app/functions/supportSign", true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          try { num.innerHTML = JSON.parse(xhr.responseText).count; } catch (e) {}
+        }
+      };
+      xhr.send();
+    } catch (e) {}
+  })();
 </script>
 </body>
 </html>
