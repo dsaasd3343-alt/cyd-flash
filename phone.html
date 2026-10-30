@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>معاينة الموبايل</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:radial-gradient(circle at 30% 20%,#1b2140,#08090f 70%);
+    font-family:-apple-system,Roboto,"Segoe UI",Tahoma,sans-serif;display:flex;
+    align-items:center;justify-content:center;overflow:hidden}
+
+  /* ---------- phone body ---------- */
+  .phone{
+    position:relative;width:330px;height:690px;border-radius:52px;
+    background:linear-gradient(150deg,#3a3f4d,#15171d 35%,#0c0d11 65%,#2c303b);
+    padding:11px;box-shadow:0 40px 80px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.09),
+      inset 0 0 0 2px rgba(255,255,255,.05);flex:0 0 auto}
+  .phone::before,.phone::after{content:"";position:absolute;right:-3px;width:3px;border-radius:3px;
+    background:linear-gradient(#4a4f5e,#23262f)}
+  .phone::before{top:150px;height:44px}
+  .phone::after{top:210px;height:88px}
+  .screen{
+    position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;
+    background:linear-gradient(170deg,#2b1e57,#4b2f7a 30%,#7b3f8f 55%,#c2564f 80%,#f0a05a);
+    display:flex;flex-direction:column}
+  .glow{position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(60px);
+    background:rgba(255,140,120,.35);top:-90px;left:-70px}
+
+  /* ---------- status bar ---------- */
+  .status{position:relative;z-index:2;display:flex;justify-content:space-between;
+    padding:14px 24px 0;font-size:12px;color:#fff;font-weight:600;letter-spacing:.3px}
+  .status .right{display:flex;gap:5px;align-items:center}
+
+  /* ---------- clock ---------- */
+  .clockbox{position:relative;z-index:2;text-align:center;margin-top:34px;color:#fff}
+  .clockbox .t{font-size:64px;font-weight:200;line-height:1;letter-spacing:-2px}
+  .clockbox .d{font-size:13px;opacity:.85;margin-top:8px}
+
+  /* ---------- icons ---------- */
+  .grid{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:repeat(4,1fr);
+    gap:16px 12px;padding:26px 18px 0;align-content:start}
+  .app{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+  .app .ic{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;
+    justify-content:center;font-size:25px;box-shadow:0 6px 14px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.35);transition:transform .12s}
+  .app:active .ic{transform:scale(.88)}
+  .app .lb{font-size:10.5px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);
+    max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* ---------- dots + dock ---------- */
+  .dots{position:relative;z-index:2;display:flex;justify-content:center;gap:6px;padding:6px 0 10px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45)}
+  .dots i.on{background:#fff}
+  .dock{position:relative;z-index:2;margin:0 14px 16px;padding:12px;border-radius:26px;
+    background:rgba(255,255,255,.17);backdrop-filter:blur(14px);
+    display:flex;justify-content:space-around}
+  .dock .ic{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;
+    justify-content:center;font-size:23px;box-shadow:0 5px 12px rgba(0,0,0,.22),
+      inset 0 1px 0 rgba(255,255,255,.35);transition:transform .12s}
+  .dock .ic:active{transform:scale(.88)}
+  .bar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:110px;height:5px;
+    border-radius:5px;background:rgba(255,255,255,.55);z-index:3}
+
+  /* ---------- toast ---------- */
+  .toast{position:absolute;left:14px;right:14px;bottom:104px;z-index:5;padding:11px 14px;
+    border-radius:18px;background:rgba(22,22,28,.86);color:#fff;font-size:12px;
+    backdrop-filter:blur(10px);opacity:0;transform:translateY(12px);
+    transition:.28s;pointer-events:none;box-shadow:0 10px 24px rgba(0,0,0,.4)}
+  .toast.show{opacity:1;transform:translateY(0)}
+
+  @media (max-height:760px){.phone{transform:scale(.86)}}
+  @media (max-height:640px){.phone{transform:scale(.74)}}
+  @media (max-width:400px){.phone{transform:scale(.9)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="screen">
+    <div class="glow"></div>
+
+    <div class="status">
+      <div id="stTime">9:41</div>
+      <div class="right"><span>▮▮▮</span><span>WiFi</span><span>84%</span></div>
+    </div>
+
+    <div class="clockbox">
+      <div class="t" id="bigTime">9:41</div>
+      <div class="d" id="bigDate">الجمعة ٣٠ أكتوبر</div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="dots"><i class="on"></i><i></i><i></i></div>
+
+    <div class="dock" id="dock"></div>
+    <div class="bar"></div>
+    <div class="toast" id="toast">تم</div>
+  </div>
+</div>
+
+<script>
+var apps = [
+  ["واتساب","💬","linear-gradient(160deg,#5ffc7b,#0f9d58)"],
+  ["تيليجرام","✈️","linear-gradient(160deg,#6ec7ff,#1a73e8)"],
+  ["إنستغرام","📸","linear-gradient(160deg,#f9ce34,#ee2a7b 55%,#6228d7)"],
+  ["يوتيوب","▶️","linear-gradient(160deg,#ff7676,#c4302b)"],
+  ["الكاميرا","📷","linear-gradient(160deg,#9aa1b5,#3d4258)"],
+  ["المعرض","🖼️","linear-gradient(160deg,#ffe082,#ff9800)"],
+  ["الرسائل","💌","linear-gradient(160deg,#7cf3a0,#1fa463)"],
+  ["الساعة","⏰","linear-gradient(160deg,#33405c,#10141f)"],
+  ["الإعدادات","⚙️","linear-gradient(160deg,#b0b8cc,#5b6378)"],
+  ["المتجر","🛍️","linear-gradient(160deg,#8dd7ff,#3b7ddd)"],
+  ["الخريطة","🗺️","linear-gradient(160deg,#9be79b,#2e8b57)"],
+  ["الموسيقى","🎵","linear-gradient(160deg,#ff9db1,#e0245e)"]
+];
+var dock = [
+  ["الهاتف","📞","linear-gradient(160deg,#7cf3a0,#1fa463)"],
+  ["المتصفح","🌐","linear-gradient(160deg,#7cc8ff,#2563eb)"],
+  ["البريد","✉️","linear-gradient(160deg,#ffd27c,#f59e0b)"],
+  ["الأخبار","📰","linear-gradient(160deg,#d0d5e2,#6b7280)"]
+];
+
+function tile(a){
+  var d = document.createElement('div');
+  d.className = 'app';
+  d.innerHTML = '<div class="ic" style="background:'+a[2]+'">'+a[1]+'</div>'+
+                '<div class="lb">'+a[0]+'</div>';
+  d.onclick = function(){ show(a[0]); };
+  return d;
+}
+var g = document.getElementById('grid');
+for (var i=0;i<apps.length;i++) g.appendChild(tile(apps[i]));
+var dk = document.getElementById('dock');
+for (var j=0;j<dock.length;j++){
+  var d = document.createElement('div');
+  d.className='ic'; d.style.background = dock[j][2]; d.textContent = dock[j][1];
+  d.onclick = (function(n){ return function(){ show(n); }; })(dock[j][0]);
+  dk.appendChild(d);
+}
+
+function show(name){
+  var t = document.getElementById('toast');
+  t.textContent = 'فتحت: ' + name;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function(){ t.classList.remove('show'); }, 1600);
+}
+
+function tick(){
+  var d = new Date();
+  var h = String(d.getHours()).padStart(2,'0'), m = String(d.getMinutes()).padStart(2,'0');
+  var s = h+':'+m;
+  document.getElementById('stTime').textContent = s;
+  document.getElementById('bigTime').textContent = s;
+  var days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  var months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('bigDate').textContent = days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()];
+}
+tick(); setInterval(tick, 15000);
+</script>
+</body>
+</html>
