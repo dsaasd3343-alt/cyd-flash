@@ -368,11 +368,11 @@ window.onerror = function (msg, src, line, col) {
 
   function makeGate(value, good) {
     var g = new THREE.Group();
-    var baseCol = good ? 0x2196f3 : 0xd32f2f;
+    var baseCol = good ? 0x2ea8ff : 0xe03434;
     var emitCol = good ? 0x1b6fd0 : 0xa01616;
 
     var panel = new THREE.Mesh(hexGeo, new THREE.MeshStandardMaterial({
-      color: baseCol, emissive: emitCol, emissiveIntensity: 1.0, roughness: 0.35, metalness: 0.1
+      color: baseCol, emissive: emitCol, emissiveIntensity: 1.7, roughness: 0.3, metalness: 0.1
     }));
     panel.rotation.x = Math.PI / 2;
     panel.rotation.y = Math.PI / 6;
@@ -381,7 +381,7 @@ window.onerror = function (msg, src, line, col) {
     var rimCol = good ? 0x66d9ff : 0xff7777;
     var rim = new THREE.Mesh(hexGeo, new THREE.MeshBasicMaterial({ color: rimCol, wireframe: true }));
     rim.rotation.copy(panel.rotation);
-    rim.scale.setScalar(1.12);
+    rim.scale.setScalar(1.18);
     g.add(rim);
 
     var num = numberSprite((value > 0 ? "+" : "") + value, good);
@@ -390,7 +390,7 @@ window.onerror = function (msg, src, line, col) {
     g.add(num);
 
     var glow = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), new THREE.MeshBasicMaterial({
-      color: rimCol, transparent: true, opacity: 0.14, side: THREE.DoubleSide
+      color: rimCol, transparent: true, opacity: 0.22, side: THREE.DoubleSide
     }));
     glow.position.z = 0.02;
     g.add(glow);
