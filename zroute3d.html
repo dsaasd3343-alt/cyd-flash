@@ -76,7 +76,15 @@ window.onerror = function (msg, src, line, col) {
   document.getElementById("loading").style.display = "none";
 
   var canvas = document.getElementById("c");
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  } catch (err) {
+    var ld = document.getElementById("loading");
+    ld.style.display = "flex";
+    ld.innerHTML = "جهازك ما يدعم WebGL — جرّب النسخة الخفيفة: zroute.html";
+    return;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.shadowMap.enabled = false;
 
@@ -720,6 +728,7 @@ window.onerror = function (msg, src, line, col) {
   document.getElementById("againBtn").addEventListener("click", startGame);
 
   resize();
+  if (location.search.indexOf("auto") >= 0) { setTimeout(startGame, 300); }
   requestAnimationFrame(loop);
 })();
 </script>
