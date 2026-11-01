@@ -63,6 +63,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+window.onerror = function (msg, src, line, col) {
+  var d = document.getElementById("loading");
+  if (d) { d.style.display = "flex"; d.textContent = "ERR: " + msg + " @ " + line + ":" + col; }
+};
 (function () {
   "use strict";
   if (typeof THREE === "undefined") {
