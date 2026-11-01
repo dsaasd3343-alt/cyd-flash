@@ -89,6 +89,8 @@ window.onerror = function (msg, src, line, col) {
 };
 </script>
 <script src="three.min.js"></script>
+<script src="GLTFLoader.js"></script>
+<script src="SkeletonUtils.js"></script>
 <script>
 (function () {
   "use strict";
@@ -131,6 +133,12 @@ window.onerror = function (msg, src, line, col) {
   scene.add(fire2);
 
   var LANES = [-2.6, 0, 2.6];
+
+  function box(w, h, d, color, rough) {
+    return new THREE.Mesh(new THREE.BoxGeometry(w, h, d),
+      new THREE.MeshStandardMaterial({ color: color, roughness: rough === undefined ? 0.85 : rough }));
+  }
+
 
   // ---------- road ----------
   var roadMat = new THREE.MeshStandardMaterial({ color: 0x4a4e54, roughness: 0.92 });
@@ -209,157 +217,109 @@ window.onerror = function (msg, src, line, col) {
     gatesOver.push(og);
   }
 
-  // ---------- humanoid builder ----------
-  function box(w, h, d, color, rough) {
-    return new THREE.Mesh(new THREE.BoxGeometry(w, h, d),
-      new THREE.MeshStandardMaterial({ color: color, roughness: rough === undefined ? 0.85 : rough }));
-  }
-  function cyl(rt, rb, h, color, seg) {
-    return new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 10),
-      new THREE.MeshStandardMaterial({ color: color, roughness: 0.6, metalness: 0.3 }));
-  }
-  function sph(r, color) {
-    return new THREE.Mesh(new THREE.SphereGeometry(r, 14, 12),
-      new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
-  }
+  // ---------- human model (GLB) ----------
+  var HERO_CFG = [
+    { tint: 0xa8724f, scale: 1.02, x: -0.95, clip: "Run" },
+    { tint: 0xd8c07a, scale: 0.97, x: 0, clip: "Run" },
+    { tint: 0xd6dfec, scale: 1.0, x: 0.95, clip: "Run" }
+  ];
 
-  function makeCharacter(cfg) {
-    var g = new THREE.Group();
-    var H = cfg.height || 1.0;
+  var heroes = [];
+  var soldiers = [];
+  var zombiePool = [];
+  var template = null;
+  var mixers = [];
 
-    var torso = box(0.58 * H, 0.74 * H, 0.36 * H, cfg.shirt);
-    torso.position.y = 1.1 * H;
-    g.add(torso);
-
-    if (cfg.vest) {
-      var vest = box(0.62 * H, 0.5 * H, 0.4 * H, cfg.vest);
-      vest.position.y = 1.14 * H;
-      g.add(vest);
-    }
-    if (cfg.backpack) {
-      var bp = box(0.5 * H, 0.6 * H, 0.28 * H, cfg.backpack);
-      bp.position.set(0, 1.16 * H, 0.28 * H);
-      g.add(bp);
-    }
-
-    var hips = box(0.5 * H, 0.2 * H, 0.32 * H, cfg.pants);
-    hips.position.y = 0.7 * H;
-    g.add(hips);
-
-    var head = sph(0.2 * H, cfg.skin);
-    head.position.y = 1.6 * H;
-    g.add(head);
-
-    if (cfg.hair) {
-      var hair = sph(0.215 * H, cfg.hair);
-      hair.position.set(0, 1.64 * H, 0.02 * H);
-      hair.scale.set(1, 0.92, 1);
-      g.add(hair);
-    }
-    if (cfg.pony) {
-      var pony = cyl(0.07 * H, 0.03 * H, 0.34 * H, cfg.hair, 8);
-      pony.position.set(0, 1.55 * H, 0.2 * H);
-      pony.rotation.x = 0.5;
-      g.add(pony);
-    }
-    if (cfg.cap) {
-      var cap = box(0.44 * H, 0.1 * H, 0.44 * H, cfg.cap);
-      cap.position.y = 1.75 * H;
-      g.add(cap);
-      var brim = box(0.4 * H, 0.05 * H, 0.2 * H, cfg.cap);
-      brim.position.set(0, 1.71 * H, 0.28 * H);
-      g.add(brim);
-    }
-    if (cfg.eyes) {
-      var em = new THREE.MeshStandardMaterial({ color: cfg.eyes, emissive: cfg.eyes, emissiveIntensity: 1.5 });
-      [-0.07, 0.07].forEach(function (x) {
-        var e = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 8), em);
-        e.position.set(x * H, 1.62 * H, 0.185 * H);
-        g.add(e);
-      });
-    }
-
-    var legL = box(0.2 * H, 0.62 * H, 0.22 * H, cfg.pants);
-    legL.position.set(-0.15 * H, 0.36 * H, 0);
-    var legR = box(0.2 * H, 0.62 * H, 0.22 * H, cfg.pants);
-    legR.position.set(0.15 * H, 0.36 * H, 0);
-    g.add(legL); g.add(legR);
-
-    var armL = box(0.16 * H, 0.56 * H, 0.16 * H, cfg.skin);
-    armL.position.set(-0.37 * H, 1.16 * H, 0);
-    var armR = box(0.16 * H, 0.56 * H, 0.16 * H, cfg.skin);
-    armR.position.set(0.37 * H, 1.16 * H, 0);
-    g.add(armL); g.add(armR);
-
-    g.userData.legs = [legL, legR];
-    g.userData.arms = [armL, armR];
-    return g;
+  function pickClip(clips, name) {
+    for (var i = 0; i < clips.length; i++) if (clips[i].name === name) return clips[i];
+    return clips[0];
   }
 
-  // ---------- three heroes ----------
+  function spawnHuman(tint, scale, clipName, timeScale) {
+    if (!template) return null;
+    var obj = THREE.SkeletonUtils.clone(template.scene);
+    obj.traverse(function (n) {
+      if (n.isMesh || n.isSkinnedMesh) {
+        n.material = n.material.clone();
+        n.material.color = new THREE.Color(tint);
+        n.material.roughness = 0.9;
+        n.material.metalness = 0.05;
+        n.frustumCulled = false;
+        n.castShadow = false;
+      }
+    });
+    obj.scale.setScalar(scale);
+    var mixer = new THREE.AnimationMixer(obj);
+    var act = mixer.clipAction(pickClip(template.animations, clipName));
+    act.play();
+    act.timeScale = timeScale || 1;
+    mixers.push(mixer);
+    var rec = { obj: obj, mixer: mixer, action: act };
+    return rec;
+  }
+
+  // ---------- heroes ----------
   var heroGroup = new THREE.Group();
   scene.add(heroGroup);
 
-  var heroes = [];
-
-  // 1) cap guy + flamethrower
-  var h1 = makeCharacter({ shirt: 0x8c4034, vest: 0x39412f, pants: 0x2a3a52, skin: 0xd9a374, cap: 0x2b3140, height: 1.02 });
-  var tank = cyl(0.12, 0.12, 0.5, 0x8a2f2a, 10);
-  tank.position.set(0.34, 1.05, 0.34);
-  tank.rotation.z = 0.2;
-  h1.add(tank);
-  var nozzle = cyl(0.05, 0.08, 0.75, 0x2b3038, 8);
-  nozzle.position.set(0.42, 1.2, 0.42);
-  nozzle.rotation.x = -1.15;
-  h1.add(nozzle);
-  h1.position.set(-0.95, 0, 0.15);
-  heroGroup.add(h1);
-  heroes.push(h1);
-
-  // 2) blonde + rocket launcher
-  var h2 = makeCharacter({ shirt: 0xc9a227, pants: 0x3d5170, skin: 0xe8bd94, hair: 0xe8d08a, pony: true, height: 0.97 });
-  var rocket = cyl(0.11, 0.13, 1.15, 0x3a4250, 10);
-  rocket.position.set(0.22, 1.42, 0.1);
-  rocket.rotation.x = -1.35;
-  h2.add(rocket);
-  h2.position.set(0, 0, 0.05);
-  heroGroup.add(h2);
-  heroes.push(h2);
-
-  // 3) white hair + rifle + backpack
-  var h3 = makeCharacter({ shirt: 0x1f2632, pants: 0x2b3242, skin: 0xdfb896, hair: 0xe6ecf5, backpack: 0x3b4350, height: 1.0 });
-  var rifle = box(0.09, 0.09, 0.95, 0x252a33, 0.5);
-  rifle.position.set(0.36, 1.2, 0.34);
-  h3.add(rifle);
-  h3.position.set(0.95, 0, 0.15);
-  heroGroup.add(h3);
-  heroes.push(h3);
-
-  // ---------- squad (reinforcements behind) ----------
+  // ---------- squad ----------
   var squadGroup = new THREE.Group();
   scene.add(squadGroup);
-  var soldiers = [];
-  for (var s = 0; s < 18; s++) {
-    var sol = makeCharacter({
-      shirt: s % 3 === 0 ? 0x3a2a40 : 0x2b3446,
-      pants: 0x1e2634,
-      skin: 0xd8a87e,
-      cap: s % 4 === 0 ? 0x8a3a4a : 0x2f3a4d,
-      height: 0.94
-    });
-    sol.visible = false;
-    squadGroup.add(sol);
-    soldiers.push(sol);
-  }
   var FORM = [];
   (function () {
-    var cols = 6, rows = 3;
+    var cols = 4, rows = 2;
     for (var r = rows - 1; r >= 0; r--) {
       for (var c = 0; c < cols; c++) {
-        FORM.push({ x: (c - (cols - 1) / 2) * 0.5, z: 0.85 + r * 0.62 + (c % 2) * 0.18 });
+        FORM.push({ x: (c - (cols - 1) / 2) * 0.62, z: 0.95 + r * 0.66 + (c % 2) * 0.2 });
       }
     }
   })();
+
+  // ---------- boss ----------
+  var bossGroup = new THREE.Group();
+  bossGroup.visible = false;
+  scene.add(bossGroup);
+  var bossRec = null;
+
+  function buildAllHumans() {
+    // heroes
+    HERO_CFG.forEach(function (c, i) {
+      var rec = spawnHuman(c.tint, c.scale, c.clip, 1);
+      if (!rec) return;
+      rec.obj.position.set(c.x, 0, 0.18 + i * 0.04);
+      heroGroup.add(rec.obj);
+      heroes.push(rec);
+    });
+
+    // splash of extra fighters behind
+    for (var s = 0; s < 8; s++) {
+      var r2 = spawnHuman(s % 2 ? 0x6d7a6a : 0x5c6c82, 0.94, "Run", 1);
+      if (!r2) break;
+      r2.obj.visible = false;
+      squadGroup.add(r2.obj);
+      soldiers.push(r2);
+    }
+
+    // boss = giant
+    bossRec = spawnHuman(0x7f93ab, 3.4, "Walk", 0.55);
+    if (bossRec) {
+      bossRec.obj.position.set(0, 0, 0);
+      bossGroup.add(bossRec.obj);
+      var em = new THREE.MeshStandardMaterial({ color: 0xff2a44, emissive: 0xff2a44, emissiveIntensity: 2 });
+      [-0.32, 0.32].forEach(function (x) {
+        var e = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), em);
+        e.position.set(x, 5.5, 0.55);
+        bossGroup.add(e);
+      });
+    }
+  }
+
+  // ---------- zombie ----------
+  function makeZombieObj() {
+    var rec = spawnHuman(0x86a866, 1.0, "Walk", 0.9);
+    if (!rec) return null;
+    return rec;
+  }
 
   // ---------- drones ----------
   function makeDrone(side) {
@@ -566,21 +526,24 @@ window.onerror = function (msg, src, line, col) {
   function spawnZombie() {
     var heavy = Math.random() < 0.16;
     var lane = Math.floor(Math.random() * 3);
-    var z = makeCharacter({
-      shirt: heavy ? 0x5a2230 : 0x3c4636,
-      pants: heavy ? 0x3a1f28 : 0x2c3527,
-      skin: heavy ? 0x8d6a54 : 0x7f9464,
-      eyes: 0xff2233,
-      height: heavy ? 1.42 : 1.0
-    });
-    z.position.set(LANES[lane] + (Math.random() - 0.5) * 0.8, 0, -95);
-    z.userData.arms[0].rotation.x = -1.9;
-    z.userData.arms[1].rotation.x = -1.9;
-    z.userData.hp = heavy ? 7 : 2.4;
-    z.userData.heavy = heavy;
-    z.userData.wob = Math.random() * 6.28;
-    scene.add(z);
+    var rec = makeZombieObj();
+    if (!rec) return;
+    var obj = rec.obj;
+    if (heavy) { obj.scale.setScalar(1.45); rec.action.timeScale = 0.75; }
+    obj.position.set(LANES[lane] + (Math.random() - 0.5) * 0.8, 0, -95);
+    scene.add(obj);
+    var z = {
+      obj: obj, mixer: rec.mixer, action: rec.action,
+      hp: heavy ? 7 : 2.4, heavy: heavy, wob: Math.random() * 6.28
+    };
     G.zombies.push(z);
+  }
+
+  function dropZombie(z, idx) {
+    scene.remove(z.obj);
+    var mi = mixers.indexOf(z.mixer);
+    if (mi >= 0) mixers.splice(mi, 1);
+    G.zombies.splice(idx, 1);
   }
 
   function spawnGates() {
@@ -672,21 +635,20 @@ window.onerror = function (msg, src, line, col) {
 
     for (var j = G.zombies.length - 1; j >= 0; j--) {
       var zb = G.zombies[j];
-      zb.position.z += move * 0.62;
-      zb.userData.wob += dt * 7;
-      zb.position.x += Math.sin(zb.userData.wob) * 0.005;
-      if (zb.position.z > 1.2) {
-        var sameLane = Math.abs(zb.position.x - LANES[G.lane]) < 1.3;
+      zb.obj.position.z += move * 0.62;
+      zb.wob += dt * 7;
+      zb.obj.position.x += Math.sin(zb.wob) * 0.005;
+      if (zb.obj.position.z > 1.2) {
+        var sameLane = Math.abs(zb.obj.position.x - LANES[G.lane]) < 1.3;
         if (sameLane) {
-          boom(zb.position.x, 1.0, 1.2, 0xff6a3a, 9);
-          G.hp = Math.max(0, G.hp - (zb.userData.heavy ? 12 : 6));
+          boom(zb.obj.position.x, 1.0, 1.2, 0xff6a3a, 9);
+          G.hp = Math.max(0, G.hp - (zb.heavy ? 12 : 6));
           G.squad = Math.max(1, G.squad - 1);
           G.shake = 0.8;
         } else {
           G.score += 3;
         }
-        scene.remove(zb);
-        G.zombies.splice(j, 1);
+        dropZombie(zb, j);
       }
     }
 
@@ -695,20 +657,19 @@ window.onerror = function (msg, src, line, col) {
       G.fireT = Math.max(0.075, 0.30 - G.squad * 0.005);
       var target = null;
       for (var k = 0; k < G.zombies.length; k++) {
-        if (!target || G.zombies[k].position.z > target.position.z) target = G.zombies[k];
+        if (!target || G.zombies[k].obj.position.z > target.obj.position.z) target = G.zombies[k];
       }
       var muzzle = new THREE.Vector3(LANES[G.lane] + 0.4, 1.25, 0.3);
       if (target) {
-        var tp = target.position.clone();
+        var tp = target.obj.position.clone();
         tp.y = 1.1;
         shootTracer(muzzle, tp);
         boom(tp.x, tp.y, tp.z, 0xffb347, 3);
-        target.userData.hp -= 1;
-        if (target.userData.hp <= 0) {
-          boom(tp.x, 1.1, tp.z, target.userData.heavy ? 0xffd24a : 0xff6a3a, target.userData.heavy ? 16 : 9);
-          G.score += target.userData.heavy ? 90 : 30;
-          scene.remove(target);
-          G.zombies.splice(G.zombies.indexOf(target), 1);
+        target.hp -= 1;
+        if (target.hp <= 0) {
+          boom(tp.x, 1.1, tp.z, target.heavy ? 0xffd24a : 0xff6a3a, target.heavy ? 16 : 9);
+          G.score += target.heavy ? 90 : 30;
+          dropZombie(target, G.zombies.indexOf(target));
         }
       } else if (G.boss && !G.boss.dead) {
         var bp = bossGroup.position.clone();
@@ -769,37 +730,24 @@ window.onerror = function (msg, src, line, col) {
     heroGroup.position.x += (laneX - heroGroup.position.x) * Math.min(1, dt * 9);
     squadGroup.position.x = heroGroup.position.x;
 
-    // heroes run animation
-    heroes.forEach(function (h, i) {
-      var ph = G.t * 9 + i * 0.5;
-      var legs = h.userData.legs, arms = h.userData.arms;
-      legs[0].rotation.x = Math.sin(ph) * 0.75;
-      legs[1].rotation.x = -Math.sin(ph) * 0.75;
-      arms[0].rotation.x = -Math.sin(ph) * 0.5;
-      arms[1].rotation.x = -0.5 + Math.sin(ph) * 0.15;
-      h.position.y = Math.abs(Math.sin(ph)) * 0.045;
-    });
+    // animate all humans via mixers
+    for (var mi = 0; mi < mixers.length; mi++) mixers[mi].update(dt);
 
     // reinforcements
     var extra = Math.min(Math.max(0, G.squad - 3), soldiers.length);
     for (var i = 0; i < soldiers.length; i++) {
       var s = soldiers[i];
       var on = i < extra;
-      s.visible = on;
+      s.obj.visible = on;
       if (!on) continue;
       var f = FORM[i % FORM.length];
-      s.position.set(f.x, 0, f.z);
-      var ph2 = G.t * 9 + i * 0.4;
-      s.userData.legs[0].rotation.x = Math.sin(ph2) * 0.7;
-      s.userData.legs[1].rotation.x = -Math.sin(ph2) * 0.7;
-      s.userData.arms[0].rotation.x = -Math.sin(ph2) * 0.45;
+      s.obj.position.set(f.x, 0, f.z);
+      s.obj.rotation.y = Math.PI;
     }
 
-    G.zombies.forEach(function (z) {
-      var ph = G.t * 6 + z.userData.wob;
-      z.userData.legs[0].rotation.x = Math.sin(ph) * 0.55;
-      z.userData.legs[1].rotation.x = -Math.sin(ph) * 0.55;
-    });
+    heroes.forEach(function (h) { h.obj.rotation.y = Math.PI; });
+
+    G.zombies.forEach(function (z) { z.obj.rotation.y = 0; });
 
     // drones bob + rotors
     [droneL, droneR].forEach(function (dr, i) {
@@ -829,7 +777,7 @@ window.onerror = function (msg, src, line, col) {
 
   // ---------- flow ----------
   function startGame() {
-    G.zombies.forEach(function (z) { scene.remove(z); });
+    G.zombies.forEach(function (z) { scene.remove(z.obj); var m0 = mixers.indexOf(z.mixer); if (m0 >= 0) mixers.splice(m0, 1); });
     G.gates.forEach(function (g) { scene.remove(g.lg); scene.remove(g.rg); });
     G.zombies = []; G.gates = [];
     bossGroup.visible = false;
@@ -861,7 +809,22 @@ window.onerror = function (msg, src, line, col) {
   document.getElementById("againBtn").addEventListener("click", startGame);
 
   resize();
-  if (location.search.indexOf("auto") >= 0) setTimeout(startGame, 300);
+
+  var loadEl = document.getElementById("loading");
+  loadEl.textContent = "جاي أحمّل الشخصيات (2 ميغا)...";
+  var loader = new THREE.GLTFLoader();
+  loader.load("models/Soldier.glb", function (gltf) {
+    template = gltf;
+    buildAllHumans();
+    loadEl.style.display = "none";
+    window.__ZR_READY = true;
+    if (location.search.indexOf("auto") >= 0) setTimeout(startGame, 200);
+  }, function (p) {
+    if (p && p.total) loadEl.textContent = "جاي أحمّل الشخصيات " + Math.round(p.loaded / p.total * 100) + "%";
+  }, function () {
+    loadEl.innerHTML = "ما تحمّلت الشخصيات — تحقق من النت<br>أو جرّب النسخة الخفيفة zroute.html";
+  });
+
   requestAnimationFrame(loop);
 })();
 </script>
