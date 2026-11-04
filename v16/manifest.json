@@ -1,0 +1,17 @@
+{
+  "name": "Future CYD — DUO v1.6",
+  "version": "1.6.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "CYD_DUO-v16.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
