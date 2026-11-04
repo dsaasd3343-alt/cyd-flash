@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future CYD — أندرويد + إيفون</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0B0D1A;color:#E8E8EE;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;line-height:1.7}
+.wrap{max-width:720px;margin:0 auto;padding:26px 18px 60px}
+h1{font-size:26px;margin:0 0 6px;background:linear-gradient(90deg,#3DDC84,#4DA3FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#8A8FA3;font-size:14px;margin-bottom:24px}
+.card{background:#141830;border:1px solid #232A47;border-radius:16px;padding:20px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 12px;color:#fff}
+h2 span{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#3DDC84;color:#0B0D1A;border-radius:8px;font-size:14px;margin-inline-end:10px;font-weight:700}
+.btn{display:block;text-align:center;background:#3DDC84;color:#0B0D1A;font-weight:700;padding:15px;border-radius:12px;text-decoration:none;font-size:16px;margin-top:8px}
+.btn.blue{background:#4DA3FF}
+.btn.ghost{background:transparent;border:1px solid #3DDC84;color:#3DDC84}
+p{margin:8px 0;color:#C3C7D6;font-size:15px}
+ol,ul{margin:8px 0 0;padding-inline-start:20px;color:#C3C7D6;font-size:15px}
+li{margin-bottom:8px}
+b{color:#fff}
+.warn{background:#2A1E12;border:1px solid #7A5220;border-radius:12px;padding:14px;margin-top:12px;font-size:14px;color:#F0C674}
+.badge{display:inline-block;background:#1B2140;border:1px solid #2C3560;border-radius:999px;padding:4px 12px;font-size:12px;color:#8A8FA3;margin-inline-end:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+td,th{padding:8px 6px;border-bottom:1px solid #232A47;text-align:right}
+th{color:#8A8FA3;font-weight:600}
+code{background:#1B2140;padding:2px 6px;border-radius:6px;font-size:13px;color:#3DDC84}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Future CYD</h1>
+  <div class="sub">رابط واحد — أندرويد + إيفون · ساعة · إشعارات · صور</div>
+
+  <div class="card">
+    <h2><span>1</span>ثبّت الفيرموير على الشاشة</h2>
+    <p>وصّل الجهاز بكمبيوتر بكيبل USB، وافتح هذا الرابط من <b>Chrome أو Edge</b> على الكمبيوتر.</p>
+    <p style="text-align:center;margin-top:14px">
+      <esp-web-install-button manifest="manifest.json">
+        <button slot="activate" class="btn blue" style="border:0;width:100%;cursor:pointer">تنصيب الفيرموير (DUO v1.5)</button>
+        <span slot="unsupported">افتح الصفحة من Chrome على كمبيوتر</span>
+        <span slot="not-allowed">لازم اتصال HTTPS</span>
+      </esp-web-install-button>
+    </p>
+    <div class="warn">إذا ما اشتغل زر التنصيب: تأكد إنك فاتح الصفحة من الكمبيوتر مو الجوال.</div>
+  </div>
+
+  <div class="card">
+    <h2><span>2</span>نزّل تطبيق الأندرويد</h2>
+    <p>هذا التطبيق ينقل إشعارات الجوال للشاشة، ويرسل الصور كمان.</p>
+    <a class="btn" href="../../CYD-Notifier-BT.apk">تحميل CYD-Notifier v2.3</a>
+  </div>
+
+  <div class="card">
+    <h2><span>3</span>صلاحية الإشعارات — أهم خطوة</h2>
+    <p>بدون هذي الصلاحية التطبيق يتصل بس <b>ما يرسل ولا إشعار</b>. هذا السبب الأشهر.</p>
+    <ol>
+      <li>افتح التطبيق واضغط زر <b>صلاحية الإشعارات</b> (أو الإعدادات ← الإشعارات)</li>
+      <li>اختر <b>CYD Notifier</b> ومنحه الوصول ← <b>السماح</b></li>
+      <li>بـ POCO / شاومي: الإعدادات ← التطبيقات ← CYD Notifier ← <b>التوفير بالطاقة</b> = <b>بدون قيود</b></li>
+      <li>وفعّل <b>التشغيل التلقائي</b> لنفس التطبيق</li>
+    </ol>
+    <div class="warn">إذا ما منحت الصلاحية، ما راح يجي ولا إشعار مهما كان الاتصال سليم.</div>
+  </div>
+
+  <div class="card">
+    <h2><span>4</span>الإقران والتشغيل</h2>
+    <ol>
+      <li>إعدادات البلوتوث بالجوال ← اقترن بـ <code>CYD-Display</code></li>
+      <li>افتح التطبيق ← اضغط زر التشغيل (2)</li>
+      <li>شوف الشريط الأعلى بالشاشة:
+        <table>
+          <tr><th>الرمز</th><th>المعنى</th></tr>
+          <tr><td><code>A+</code></td><td>الأندرويد متصل فعلياً</td></tr>
+          <tr><td><code>A-</code></td><td>الأندرويد غير متصل</td></tr>
+          <tr><td><code>i+</code></td><td>الإيفون متصل (ANCS)</td></tr>
+        </table>
+      </li>
+      <li>بعد ما يصير <code>A+</code> أرسل إشعار تجريبي — لازم يظهر خلال ثانية</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span>5</span>الإيفون</h2>
+    <p>ما يحتاج تطبيق. بس شغّل البلوتوث وقرّب الجهاز، راح يسألك عن الاقتران ← <b>اقترن</b>.</p>
+    <p>ملاحظة: الإيفون يشتغل بعد ما يمر دقيقتين بدون أندرويد، لأن الأندرويد له الأولوية.</p>
+  </div>
+
+  <div class="card">
+    <h2><span>6</span>الصور</h2>
+    <p>من التطبيق اضغط الزر الأخضر <b>إرسال صورة من معرض جوالـي</b>. تظهر فوراً وتنحفظ — آخر ٨ صور تبقى بالجهاز.</p>
+    <p>اضغط على الشاشة تعرض الصور، وضغطة ثانية تقلّب للتي بعدها.</p>
+  </div>
+
+  <div class="card">
+    <h2>إذا صار <code>A+</code> وما اكو إشعارات</h2>
+    <p>المشكلة بالصلاحية مو بالاتصال. ارجع للخطوة 3 وتأكد إن CYD Notifier مفعّل داخل قائمة <b>وصول الإشعارات</b>.</p>
+  </div>
+
+  <p style="text-align:center;color:#4A4F63;font-size:12px;margin-top:30px">Future Company · DUO v1.5</p>
+</div>
+</body>
+</html>
