@@ -3,50 +3,63 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Future CYD — الإشعارات (أندرويد)</title>
+<title>Future CYD — الإشعارات فقط</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
- body{background:#0B0D1A;color:#EDEFF7;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;margin:0;padding:22px;line-height:1.9}
- h1{font-size:22px;margin:0 0 6px}
- p.sub{color:#9AA1BC;margin:0 0 20px;font-size:14px}
- .card{background:#141830;border:1px solid #232A4D;border-radius:14px;padding:18px;margin-bottom:16px}
- h2{font-size:17px;margin:0 0 10px;color:#8FB8FF}
- ol{margin:0;padding-inline-start:22px}
- li{margin-bottom:8px}
- a.btn{display:block;text-align:center;background:#4DA3FF;color:#08101F;font-weight:700;
-   text-decoration:none;padding:14px;border-radius:12px;margin-top:12px}
- a.green{background:#3DDC84}
- a.purple{background:#9575CD}
- code{background:#0B0D1A;padding:2px 6px;border-radius:6px;font-size:13px;color:#B9C0DA}
- .tip{color:#8A8FA3;font-size:13px}
- .ok{background:#10241A;border-color:#1F5A3A;color:#8CF0B4}
+*{box-sizing:border-box}
+body{margin:0;background:#0B0D1A;color:#E8E8EE;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;line-height:1.8}
+.wrap{max-width:720px;margin:0 auto;padding:26px 18px 60px}
+h1{font-size:24px;margin:0 0 6px;color:#3DDC84}
+.sub{color:#8A8FA3;font-size:14px;margin-bottom:20px}
+.card{background:#141830;border:1px solid #232A47;border-radius:16px;padding:20px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 10px;color:#fff}
+h2 span{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#3DDC84;color:#0B0D1A;border-radius:8px;font-size:14px;margin-inline-end:10px;font-weight:700}
+p{margin:8px 0;color:#C3C7D6;font-size:15px}
+ol{margin:8px 0 0;padding-inline-start:20px;color:#C3C7D6;font-size:15px}
+li{margin-bottom:8px}
+b{color:#fff}
+.btn{display:block;text-align:center;background:#3DDC84;color:#0B0D1A;font-weight:700;padding:15px;border-radius:12px;text-decoration:none;font-size:16px;border:0;width:100%;cursor:pointer}
+.btn2{background:#4DA3FF}
+.ok{background:#12261A;border:1px solid #2C6B41;border-radius:12px;padding:13px;margin-top:12px;font-size:14px;color:#7ED9A0}
+code{background:#1B2140;padding:2px 6px;border-radius:6px;font-size:13px;color:#3DDC84}
 </style>
 </head>
 <body>
-<h1>Future CYD — إشعارات أندرويد</h1>
-<p class="sub">نسخة الإشعارات بس. بلا صور، بلا آيفون.</p>
+<div class="wrap">
+  <h1>Future CYD — الإشعارات فقط</h1>
+  <div class="sub">فيرموير v3.0 · أندرويد فقط · بدون صور · بدون آيفون</div>
 
-<div class="card">
-  <h2>1. فلّش الفيرموير</h2>
-  <p>وصّل الشاشة بالكمبيوتر بكابل بيانات، بعدين اضغط الزر.</p>
-  <a class="btn" href="https://dsaasd3343-alt.github.io/cyd-flash/android/flash.html?manifest=manifest.json">فلّش فيرموير v3.0</a>
-</div>
+  <div class="ok">نسخة نظيفة: إشعارات أندرويد بس، مع رسائل فحص ترسلها من التطبيق وتظهر على الشاشة فوراً.</div>
 
-<div class="card">
-  <h2>2. نزّل التطبيق</h2>
-  <p>اسمه CYD Notifier. إذا نزّلته قبل، احذف القديم وثبّت هذا.</p>
-  <a class="btn green" href="CYD-Notif-v3.0.apk">تنزيل CYD-Notif-v3.0.apk</a>
-  <p class="tip">إذا المتصفح رفض التنزيل، افتح الرابط بمتصفح كروم مو داخل واتساب.</p>
-</div>
+  <div class="card">
+    <h2><span>1</span>نصّب الفيرموير</h2>
+    <p>افتح الصفحة من Chrome على كمبيوتر، وصّل الشاشة بكابل USB، واضغط الزر.</p>
+    <p style="margin-top:14px">
+      <esp-web-install-button manifest="manifest.json">
+        <button slot="activate" class="btn">تنصيب v3.0 — إشعارات فقط</button>
+        <span slot="unsupported">افتح الصفحة من Chrome على كمبيوتر</span>
+        <span slot="not-allowed">لازم HTTPS</span>
+      </esp-web-install-button>
+    </p>
+  </div>
 
-<div class="card ok">
-  <h2>3. التشغيل</h2>
-  <ol>
-    <li>افتح التطبيق واضغط <b>ربط الجهاز</b></li>
-    <li>اضغط <b>السماح بقراءة الإشعارات</b> وفعّل CYD Notifier من القائمة</li>
-    <li>اكتب أي نص واضغط <b>إرسال رسالة الفحص</b> — تظهر على الشاشة فوراً</li>
-    <li>بعدها كل إشعار يجي على الجوال يطلع على الشاشة تلقائياً</li>
-  </ol>
-  <p class="tip">خلّي التطبيق شغال بالخلفية واسمح له بالعمل بدون قيود من إعدادات الطاقة، وإلا POCO يقطع البلوتوث.</p>
+  <div class="card">
+    <h2><span>2</span>نزّل التطبيق الجديد</h2>
+    <p>اسمه <b>CYD Notifier</b>. احذف أي نسخة قديمة أول، لأن هذا حزمة جديدة.</p>
+    <p><a class="btn btn2" href="CYD-Notif-v3.0.apk">تنزيل CYD-Notif-v3.0.apk</a></p>
+    <p style="font-size:13px;color:#8A8FA3">إذا المتصفح رفض التنزيل، افتح الرابط بكروم مو داخل واتساب.</p>
+  </div>
+
+  <div class="card">
+    <h2><span>3</span>التشغيل</h2>
+    <ol>
+      <li>افتح التطبيق واضغط <b>ربط الجهاز</b></li>
+      <li>اضغط <b>السماح بقراءة الإشعارات</b> وفعّل <b>CYD Notifier</b> من القائمة</li>
+      <li>اكتب أي نص واضغط <b>إرسال رسالة الفحص</b> — تظهر على الشاشة فوراً</li>
+      <li>بعدها كل إشعار يجي على الجوال يطلع على الشاشة تلقائياً</li>
+    </ol>
+    <p style="margin-top:12px;font-size:13px;color:#8A8FA3">خلّي التطبيق مسموح يشتغل بالخلفية بدون قيود من إعدادات الطاقة، وإلا POCO يقطع البلوتوث.</p>
+  </div>
 </div>
 </body>
 </html>
