@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future CYD — تنصيب وضع الإيفون (ANCS)</title>
+<style>
+  body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#0d1018;color:#eef1f8;line-height:1.9;padding:28px}
+  .card{max-width:640px;margin:0 auto;background:#161b26;border:1px solid #242c3d;border-radius:18px;padding:28px}
+  h1{font-size:24px;margin:0 0 6px}
+  p{color:#9aa3b8;font-size:15px}
+  ol{color:#cfd6e6;font-size:15px;padding-inline-start:20px}
+  li{margin-bottom:10px}
+  esp-web-install-button{display:block;margin:22px 0}
+  .note{background:#1c2331;border-radius:12px;padding:14px;font-size:13px;color:#9aa3b8;margin-top:18px}
+  a{color:#7c9cff}
+</style>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+</head>
+<body>
+<div class="card">
+  <h1>Future CYD — وضع الإيفون</h1>
+  <p>ينصّب فيرموير ANCS اللي يستقبل إشعارات الإيفون مباشرة بالبلوتوث، بدون أي تطبيق على الجوال.</p>
+  <ol>
+    <li>وصّل شاشة CYD بالكمبيوتر بكيبل USB (أو من جوال أندرويد بمتصفح Chrome عبر USB-OTG).</li>
+    <li>اضغط زر التنصيب تحت واختار المنفذ (COM).</li>
+    <li>بعد ما يخلص، افتح البلوتوث بالإيفون.</li>
+    <li>شغّل CYD — راح يدور على الإيفون ويتصل ويّه، وإذا طلب تأكيد اضغط Pair.</li>
+  </ol>
+  <esp-web-install-button manifest="manifest.json"></esp-web-install-button>
+  <div class="note">
+    يحتاج متصفح Chrome أو Edge على كمبيوتر. أول تنصيب يمسح كل شي على الجهاز.
+  </div>
+</div>
+</body>
+</html>
