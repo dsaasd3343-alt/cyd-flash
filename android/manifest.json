@@ -1,6 +1,6 @@
 {
-  "name": "Future CYD — Photos v2.4",
-  "version": "2.4.0",
+  "name": "Future CYD — Photos v2.5",
+  "version": "2.5.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -8,7 +8,7 @@
       "improv": false,
       "parts": [
         {
-          "path": "CYD_ANDROID-v2.4.bin",
+          "path": "CYD_ANDROID-v2.5.bin",
           "offset": 0
         }
       ]
