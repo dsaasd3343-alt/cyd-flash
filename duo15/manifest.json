@@ -1,0 +1,17 @@
+{
+  "name": "Future CYD — DUO v1.5 (no flicker + clock)",
+  "version": "1.5.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "CYD_DUO-v15.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
