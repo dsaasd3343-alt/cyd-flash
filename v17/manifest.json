@@ -1,0 +1,17 @@
+{
+  "name": "Future CYD — DUO v1.7 (diagnostics)",
+  "version": "1.7.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "CYD_DUO-v17.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
