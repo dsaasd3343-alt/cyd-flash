@@ -1,0 +1,14 @@
+{
+  "name": "Future CYD — DUO (Android + iPhone)",
+  "version": "1.0.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        { "path": "CYD_DUO-merged.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
