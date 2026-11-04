@@ -1,0 +1,17 @@
+{
+  "name": "Future CYD — DUO v1.4 (clock + Android first)",
+  "version": "1.4.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "CYD_DUO-v14.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
