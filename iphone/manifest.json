@@ -1,0 +1,16 @@
+{
+  "name": "Future CYD — iPhone (ANCS)",
+  "version": "1.0.0",
+  "home_assistant_domain": "esphome",
+  "funding_url": "https://base44.com",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        { "path": "CYD_ANCS-merged.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
