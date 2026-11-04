@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future CYD — Android فقط</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0B0D1A;color:#E8E8EE;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;line-height:1.8}
+.wrap{max-width:720px;margin:0 auto;padding:26px 18px 60px}
+h1{font-size:24px;margin:0 0 6px;color:#3DDC84}
+.sub{color:#8A8FA3;font-size:14px;margin-bottom:20px}
+.card{background:#141830;border:1px solid #232A47;border-radius:16px;padding:20px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 10px;color:#fff}
+h2 span{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#3DDC84;color:#0B0D1A;border-radius:8px;font-size:14px;margin-inline-end:10px;font-weight:700}
+p{margin:8px 0;color:#C3C7D6;font-size:15px}
+ol{margin:8px 0 0;padding-inline-start:20px;color:#C3C7D6;font-size:15px}
+li{margin-bottom:8px}
+b{color:#fff}
+.btn{display:block;text-align:center;background:#3DDC84;color:#0B0D1A;font-weight:700;padding:15px;border-radius:12px;text-decoration:none;font-size:16px;border:0;width:100%;cursor:pointer}
+.ok{background:#12261A;border:1px solid #2C6B41;border-radius:12px;padding:13px;margin-top:12px;font-size:14px;color:#7ED9A0}
+.warn{background:#2A1E12;border:1px solid #7A5220;border-radius:12px;padding:13px;margin-top:12px;font-size:14px;color:#F0C674}
+code{background:#1B2140;padding:2px 6px;border-radius:6px;font-size:13px;color:#3DDC84}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Future CYD — Android فقط</h1>
+  <div class="sub">فيرموير v2.0 · بدون آيفون نهائياً</div>
+
+  <div class="ok">شلنا دعم الآيفون كامل. صار الفيرموير أندرويد بس — أخف بذاكرة 55 كيلوبايت، وحالة الاتصال صارت تتبع البلوتوث الحقيقي.</div>
+
+  <div class="card">
+    <h2><span>1</span>نصّب الفيرموير</h2>
+    <p>افتح الصفحة من Chrome على كمبيوتر، وصّل الشاشة بكابل USB، واضغط الزر.</p>
+    <p style="margin-top:14px">
+      <esp-web-install-button manifest="manifest.json">
+        <button slot="activate" class="btn">تنصيب v2.0 — أندرويد فقط</button>
+        <span slot="unsupported">افتح الصفحة من Chrome على كمبيوتر</span>
+        <span slot="not-allowed">لازم HTTPS</span>
+      </esp-web-install-button>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span>2</span>شنو تغيّر</h2>
+    <ol>
+      <li>صار <b>متصل ✓</b> يظهر بس لما الجوال مربوط فعلاً على البلوتوث</li>
+      <li>ما بقى سكان آيفون بالخلفية يلخبط الذاكرة</li>
+      <li>الأرقام <code>RX</code> و<code>L</code> أسفل الشاشة تبقى، وتخبرك البايتات توصل لو لا</li>
+      <li>استقبال الصور باقي مثل ما هو</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span>3</span>بعد التنصيب</h2>
+    <ol>
+      <li>من بلوتوث الجوال: احذف/انسَ <b>CYD-Display</b> إذا كان محفوظ، واقترن من جديد</li>
+      <li>افتح تطبيق <b>CYD Notifier</b> ← اضغط 2) START</li>
+      <li>الشريط لازم يصير <b>A+</b> والشاشة <b>متصل ✓</b></li>
+    </ol>
+    <div class="warn">لا تفتح CYD Notifier و CYD Photos بنفس الوقت — الجهاز يقبل اتصال واحد بس.</div>
+  </div>
+
+  <p style="text-align:center;color:#4A4F63;font-size:12px;margin-top:26px">Future Company · CYD Android v2.0</p>
+</div>
+</body>
+</html>
