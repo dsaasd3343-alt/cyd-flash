@@ -1,6 +1,6 @@
 {
-  "name": "Future CYD — Classic (إشعارات)",
-  "version": "2.3.0",
+  "name": "Future CYD — Notifications v4.0",
+  "version": "4.0.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -8,7 +8,7 @@
       "improv": false,
       "parts": [
         {
-          "path": "CYD-Classic-v2.3.bin",
+          "path": "CYD-CLASSIC-v4.0.bin",
           "offset": 0
         }
       ]
