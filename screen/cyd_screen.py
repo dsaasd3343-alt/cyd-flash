@@ -76,7 +76,8 @@ def frame_bytes(img):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", required=True, help="e.g. COM3")
+    ap.add_argument("--port", default="", help="USB: COM3")
+    ap.add_argument("--host", default="", help="WiFi: the IP shown on the CYD")
     ap.add_argument("--fps", type=float, default=4.0)
     ap.add_argument("--rotate", type=int, default=0, choices=[0, 90])
     ap.add_argument("--region", default="", help="x,y,w,h  (default: whole screen)")
@@ -91,9 +92,18 @@ def main():
             print("--region needs four numbers: x,y,w,h")
             sys.exit(1)
 
-    ser = serial.Serial(a.port, 921600, timeout=1, write_timeout=3)
-    time.sleep(1.5)
-    print("connected to", a.port, "- press Ctrl+C to stop")
+    ser = None
+    net = None
+    if a.host:
+        import socket
+        net = socket.create_connection((a.host, 8765), timeout=6)
+        net.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        net.settimeout(2.0)
+        print("connected to", a.host, "over WiFi - press Ctrl+C to stop")
+    else:
+        ser = serial.Serial(a.port, 921600, timeout=1.5, write_timeout=3)
+        time.sleep(1.5)
+        print("connected to", a.port, "- press Ctrl+C to stop")
 
     target = 1.0 / max(a.fps, 0.2)
     last_hash = None
@@ -115,8 +125,19 @@ def main():
         h = hashlib.md5(data).digest()
         if h != last_hash:                      # skip identical frames
             last_hash = h
-            ser.write(data)
-            ser.flush()
+            if net:
+                net.sendall(data)
+                try:
+                    ack = net.recv(1)
+                except Exception:
+                    ack = b""
+            else:
+                ser.reset_input_buffer()
+                ser.write(data)
+                ser.flush()
+                ack = ser.read(1)             # the CYD replies "K" once drawn
+            if ack != b"K":
+                sys.stdout.write("\nno reply from the screen\n")
             sent += 1
 
         fps = sent / max(time.time() - t0, 0.001)
