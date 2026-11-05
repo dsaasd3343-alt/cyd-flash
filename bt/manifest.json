@@ -1,6 +1,6 @@
 {
   "name": "Future CYD — Bluetooth only",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -8,7 +8,7 @@
       "improv": false,
       "parts": [
         {
-          "path": "CYD-BT-v6.3.bin",
+          "path": "CYD-BT-v6.4.bin",
           "offset": 0
         }
       ]
