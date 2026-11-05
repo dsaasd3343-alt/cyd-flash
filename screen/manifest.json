@@ -1,6 +1,6 @@
 {
   "name": "Future CYD — WiFi Screen",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "new_install_prompt_erase": true,
   "builds": [
     {
@@ -8,7 +8,7 @@
       "improv": false,
       "parts": [
         {
-          "path": "CYD-Screen-WiFi-v2.1.bin",
+          "path": "CYD-WScreen-v3.0.bin",
           "offset": 0
         }
       ]
