@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Future CYD — الفلاشر</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0B0D1A;color:#E8E8EE;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;line-height:1.8}
+.wrap{max-width:720px;margin:0 auto;padding:26px 18px 60px}
+h1{font-size:24px;margin:0 0 6px;color:#3DDC84}
+.sub{color:#8A8FA3;font-size:14px;margin-bottom:20px}
+.card{background:#141830;border:1px solid #232A47;border-radius:16px;padding:20px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 8px;color:#fff}
+p{margin:6px 0;color:#C3C7D6;font-size:14px}
+.tag{display:inline-block;background:#1B2140;color:#9FB2D8;border-radius:8px;padding:2px 10px;font-size:12px;margin-inline-start:8px}
+esp-web-install-button{display:block;margin-top:14px}
+esp-web-install-button button{width:100%;background:#3DDC84;color:#0B0D1A;font-weight:700;font-size:16px;border:0;border-radius:12px;padding:15px;cursor:pointer;font-family:inherit}
+.card.b button{background:#4DA3FF}
+.note{background:#12261A;border:1px solid #2C6B41;border-radius:12px;padding:13px;margin-top:16px;font-size:14px;color:#7ED9A0}
+.warn{background:#2A1D12;border:1px solid #7A4A1E;border-radius:12px;padding:13px;margin-top:16px;font-size:14px;color:#F0B27A}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Future CYD — الفلاشر</h1>
+  <div class="sub">حرق الفيرموير من المتصفح مباشرة، بلا تنزيل ملفات ولا برامج</div>
+
+  <div class="card a">
+    <h2>الإشعارات<span class="tag">BT 6.5</span></h2>
+    <p>إشعارات الجوال على الشاشة عبر البلوتوث، مع الساعة وقائمة الإشعارات والأيقونات.</p>
+    <esp-web-install-button manifest="../bt/manifest.json">
+      <button slot="activate">حرق فيرموير الإشعارات</button>
+      <span slot="unsupported">افتح الصفحة بكروم أو إيدج على الكمبيوتر</span>
+    </esp-web-install-button>
+  </div>
+
+  <div class="card b">
+    <h2>شاشة العرض<span class="tag">WiFi 2.0</span></h2>
+    <p>تعرض صورة جوالك أو الكمبيوتر على الشاشة عبر الواي فاي، وترجع للإشعارات تلقائياً إذا توقف البث.</p>
+    <esp-web-install-button manifest="../screen/manifest.json">
+      <button slot="activate">حرق فيرموير الشاشة</button>
+      <span slot="unsupported">افتح الصفحة بكروم أو إيدج على الكمبيوتر</span>
+    </esp-web-install-button>
+  </div>
+
+  <div class="note">وصّل الشاشة بكيبل USB، اضغط الزر، واختار المنفذ (COM) اللي يظهر.</div>
+  <div class="warn">لازم كروم أو إيدج على الكمبيوتر، ويفضّل كيبل بيانات مو كيبل شحن فقط. إذا المنفذ ما ظهر، اضغط الكيبل ثانية أو غيّر المنفذ.</div>
+</div>
+</body>
+</html>
