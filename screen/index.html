@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CYD — شاشة عرض للكمبيوتر</title>
+<title>CYD — شاشة عرض بالواي فاي</title>
 <style>
 body{margin:0;background:#0B0D1A;color:#E8E8EE;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;line-height:1.9;padding:22px}
 .wrap{max-width:700px;margin:0 auto}
@@ -23,40 +23,46 @@ pre{background:#0B0D1A;padding:12px;border-radius:10px;overflow-x:auto;color:#B9
 </head>
 <body>
 <div class="wrap">
-<h1>CYD — شاشة عرض من الكمبيوتر</h1>
-<div class="sub">الشاشة تصير شاشة صغيرة تعرض صورة من الكمبيوتر عبر كيبل USB</div>
+<h1>CYD — شاشة عرض بالواي فاي</h1>
+<div class="sub">صورة الكمبيوتر أو الجوال تنتقل للشاشة بلا كيبل</div>
 
 <div class="card">
 <h2>1. الفيرموير</h2>
 <ol>
-  <li>نزّل الملف واحرقه بنفس الطريقة السابقة (esp flashing page)</li>
-  <li>بعد الفلاش لازم تشوف SCR 1.0 بالشاشة الفاضية</li>
+  <li>نزّل الملف واحرقه</li>
+  <li>أول تشغيل: الشاشة تنشئ شبكة اسمها <b>CYD-Setup</b></li>
+  <li>من الجوال: اتصل بـ CYD-Setup وافتح <b>192.168.4.1</b> واكتب اسم شبكتك وكلمتها</li>
+  <li>بعد الحفظ تعيد التشغيل وتتصل، ويظهر على الشاشة <b>IP</b> مثل 192.168.1.7</li>
 </ol>
-<a class="btn" href="CYD-Screen-v1.0.bin">تنزيل CYD-Screen-v1.0.bin</a>
+<a class="btn" href="CYD-Screen-WiFi-v2.0.bin">تنزيل CYD-Screen-WiFi-v2.0.bin</a>
+<p class="tip">بعد الفلاش لازم تشوف SCR 1.1 بأسفل الشاشة الفاضية.</p>
 </div>
 
 <div class="card">
-<h2>2. برنامج الكمبيوتر</h2>
+<h2>2. من الجوال</h2>
 <ol>
-  <li>افتح CMD واكتب: <code>pip install pillow pyserial</code></li>
-  <li>نزّل الملف هذا بمجلد</li>
-  <li>شوف رقم المنفذ من Device Manager تحت Ports (مثل COM3)</li>
-  <li>شغّل: <code>python cyd_screen.py --port COM3</code></li>
+  <li>ثبّت التطبيق وافتحه</li>
+  <li>اكتب IP الشاشة واضغط ابدأ العرض، واسمح بتصوير الشاشة</li>
+  <li>صورة جوالك تنعرض على CYD فوراً</li>
 </ol>
-<a class="btn btn2" href="cyd_screen.py">تنزيل cyd_screen.py</a>
-<pre>python cyd_screen.py --port COM3 --fps 4
-python cyd_screen.py --port COM3 --rotate 90      # إذا الشاشة نائمة على جنبها
-python cyd_screen.py --port COM3 --region 0,0,1200,800   # جزء من الشاشة</pre>
+<a class="btn btn2" href="CYD-Mirror-v1.0.apk">تنزيل CYD-Mirror-v1.0.apk</a>
 </div>
 
 <div class="card">
-<h2>شنو تتوقع</h2>
+<h2>3. من الكمبيوتر</h2>
 <ol>
-  <li>الشاشة تعرض صورة مصغرة من شاشتك باستمرار</li>
-  <li>السرعة ٣-٤ صورة بالثانية عبر USB — كافية للشات والجداول والساعة، مو كافية للفيديو</li>
-  <li>إذا ما وصلت أي صورة، ترجع الشاشة تعرض الإشعارات تلقائياً بعد ٤ ثواني</li>
+  <li><code>pip install pillow pyserial</code></li>
+  <li><code>python cyd_screen.py --host 192.168.1.7</code></li>
 </ol>
-<div class="warn">الفيديو والألعاب ما يشتغلون بسلاسة على هذه الشاشة — 240x320 وسرعة USB ما تكفي. الشات والجداول والعدادات ممتازة.</div>
+<a class="btn2 btn" href="cyd_screen.py">تنزيل cyd_screen.py</a>
+<pre>python cyd_screen.py --host 192.168.1.7 --fps 5
+python cyd_screen.py --host 192.168.1.7 --rotate 90</pre>
+</div>
+
+<div class="card">
+<h2>ملاحظات صريحة</h2>
+<div class="warn">الجوال يرسل صورة JPEG مصغّرة 240×320. الوضوح متوسط والسرعة ٦-٨ صورة بالثانية على واي فاي جيد، فالشات والجداول والصور ممتازة، أما الفيديو والألعاب فما راح تكون سلسة.</div>
+<p class="tip">إذا ضاع الاتصال، الشاشة ترجع تعرض الإشعارات تلقائياً بعد ثواني. وإذا بغيت تغيّر الشبكة، امسح الإعدادات من الشاشة بإعادة الفلاش مع محو البيانات.</p>
 </div>
 </div>
 </body>
