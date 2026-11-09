@@ -50,12 +50,19 @@
   .hl { color: #2ee66b; font-weight: bold; }
   .wrow { font-size:13px; line-height:1.9; color:#e7e7e7; }
   .note { color: #a9b0d0; font-size: 13px; line-height: 1.8; margin-top: 12px; }
+  #verBadge {
+    display: inline-block; margin: 10px 0 2px; padding: 7px 14px; border-radius: 999px;
+    background: rgba(255,213,74,0.14); border: 1px solid rgba(255,213,74,0.5);
+    color: #ffd54a; font-size: 15px; font-weight: bold; letter-spacing: .3px;
+  }
+  #verBadge b { color: #fff; }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="brand">FUTURE COMPANY</div>
-  <h1>CYD Phone Notification Display <small>&mdash; mirrored from your phone via Pushbullet</small></h1>
+  <h1>CYD Phone Notification Display <small>&mdash; Bluetooth only</small></h1>
+  <div id="verBadge">Firmware version: <b id="verNum">checking...</b></div>
 
   <div class="features">
     <span>&#128242; Phone Notifications</span>
@@ -103,6 +110,16 @@
   <script>
     const sel = document.getElementById('device');
     const wiring = document.getElementById('wiring');
+    const verNum = document.getElementById('verNum');
+    async function showVersion() {
+      verNum.textContent = 'checking...';
+      try {
+        const r = await fetch(sel.value + '?v=' + Date.now());
+        const j = await r.json();
+        verNum.textContent = j.version || 'unknown';
+        var v2 = document.getElementById('verNum2'); if (v2) v2.textContent = j.version || '';
+      } catch (e) { verNum.textContent = 'unknown'; }
+    }
     function renderBtn() {
       document.getElementById('btnHolder').innerHTML =
         '<esp-web-install-button manifest="' + sel.value + '">' +
@@ -111,12 +128,13 @@
         '</esp-web-install-button>';
       wiring.style.display = sel.value.includes('ili9341') ? 'block' : 'none';
     }
-    sel.addEventListener('change', renderBtn);
+    sel.addEventListener('change', function () { renderBtn(); showVersion(); });
+    showVersion();
   </script>
 
   <p class="note">
     Installing requires Chrome or Edge (desktop or Android). The setup steps after install work from any phone, including iPhone.
-    Firmware v1.6.0: Bluetooth-only — flash, pair, done. No Wi-Fi, no passwords, no tokens. New: notification PHOTOS now appear right on the display (sent over Bluetooth). Previous:  all notifications appear together on one touch list — tap any row to open it, tap left/right to flip through them, tap the middle to mark all read and return to the list. The clock and arrival times come from your phone automatically.
+    This page flashes firmware <b id="verNum2" style="color:#ffd54a;">4.0.0</b> &mdash; Bluetooth only: no Wi-Fi, no access point, no passwords. Tap any row on the screen to open it, tap the middle to mark all read, and the clock and arrival times come from your phone automatically.
   </p>
 </div>
 </body>
