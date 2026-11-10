@@ -1,0 +1,17 @@
+{
+  "name": "CYD test without touch",
+  "version": "7.0.0-nt",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "CYD-BT-v7.0NT.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
